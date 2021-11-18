@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>可视化地理空间数据服务研发平台 Visualization map spatial data service R&D</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  </head>
+  <style>
+    html,body{
+        margin: 0;
+        width:100%;
+        height:100%;
+        margin: 0;
+        padding: 0;
+        max-width: 100%;
+        max-height: 100%;
+        -webkit-font-smoothing: antialiased;
+    }
+    iframe {
+        /* top: 5.1%; */
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        position: absolute;
+        border: medium none;
+    }
+  </style>
+  <body  scroll="no" id="mapbody">
+    <iframe
+        id="core_content"
+        name="iframeName"
+        ref="core_content"
+        title="core_content"
+        src='../iframe.html'
+        sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-downloads"
+        scrolling="auto"
+    ></iframe>
+  <script>
+    //Frame 对象
+    const FrameObj = document.getElementById('core_content');
+    //接收器
+    window.receiveMessageFromIndex = function (e) {
+        if (e !== undefined) {
+            console.log( '接收', e.data);
+        }
+    }
+    //监听message事件
+    window.addEventListener("message", window.receiveMessageFromIndex, false);
+
+    //规定发送格式
+    const data = {
+        event : "方法名称",
+        value: "内容:hello world :)"
+    }
+   
+    //执行函数
+    function implement(params,value) {
+        if(value != null) params.value = value;
+        FrameObj.contentWindow.postMessage(params, '*');
+    }
+    //发送器
+    window.onload = function(){
+        FrameObj.contentWindow.postMessage(data, '*');
+
+        window.implement(BackgroundAnimation)
+        window.implement(PositionBox)
+    }
+
+    
+  
+    /////////////////////////////////////////////////////////////////行参
+    
+    //高程 球体动画
+    const BackgroundAnimation = {
+      event : "_BackgroundAnimation",
+      value: false
+    }
+    //停止动画效果
+    const AnimationStop  = {
+      event : "_AnimationStop",
+      value: false
+    }
+    //鼠标事件控件
+    const PositionBox  = {
+      event : "_PositionBox",
+      value: false
+    }
+  </script>
+  </body>
+</html>
