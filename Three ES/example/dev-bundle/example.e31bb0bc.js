@@ -49895,7 +49895,7 @@ init();
 animate();
 
 function reinstantiateTiles() {
-  var url = hashUrl || "http://192.168.2.17:8077/qibao/3dtiles/DX/tileset.json";
+  var url = hashUrl || "http://taoistcore.com:9732/%E6%A0%A1%E5%9B%AD%E6%A8%A1%E5%9E%8B/tileset.json";
 
   if (tiles) {
     offsetParent.remove(tiles.group);
@@ -50398,7 +50398,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58613" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51402" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -80,7 +80,7 @@ init();
 animate();
 function reinstantiateTiles() {
 
-	const url = hashUrl || "http://192.168.2.17:8077/qibao/3dtiles/DX/tileset.json";
+	const url = hashUrl || "http://taoistcore.com:9732/%E6%A0%A1%E5%9B%AD%E6%A8%A1%E5%9E%8B/tileset.json";
 
 	if ( tiles ) {
 
