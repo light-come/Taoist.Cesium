@@ -15,7 +15,7 @@ npx webpack
 
 
 
-### [#](http://mars3d.cn/dev/guide/start/cesium.html#教程)教程
+### 教程
 
 ###### [官方教程](https://cesium.com/learn/cesiumjs-learn/)和[官方示例](https://sandcastle.cesium.com/)，并在学习中随时查阅[API文档](http://mars3d.cn/api/cesium/)。
 
@@ -26,12 +26,12 @@ npx webpack
 - [ND_DoYouService整理的教程](https://blog.csdn.net/newston/category_9194440.html)：ND个人2021年对其他人编写的教程简单整理了下。
 - [GIS李胜Cesium开发教程](https://www.zhihu.com/people/ls870061011/posts)：GIS李胜2021年编写的一系列教程。
 
-### [#](http://mars3d.cn/dev/guide/start/cesium.html#代码)代码
+### 代码
 
 - [Cesium官方示例zgeo整理版](http://www.zgeo.work/cesiumTx/examples/index.html)：如果看不习惯官方的示例，可以看下zgeo整理的这个版本。
 - [张言哲github代码](https://github.com/YanzheZhang/Cesium.HPUZYZ.Demo)：张言哲个人在2018至2019年Cesium学习中记录并汇总的代码
 
-### [#](http://mars3d.cn/dev/guide/start/cesium.html#其他)其他
+### 其他
 
 - [vtxf编写的Cesium资料大全](https://zhuanlan.zhihu.com/p/34217817)：唐晓飞(vtxf)对cesium及其周边整理的相关资料。
 - [让GIS三维可视化变得简单-Cesium地球初始化(opens new window)](https://juejin.cn/post/6867436612486168584)
