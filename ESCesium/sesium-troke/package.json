@@ -1,0 +1,24 @@
+{
+  "name": "esium-project",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint \"src/**/*.js\" \"test/**/*.js\" \"example/*.js\" && tsc -p tsconfig.json --noEmit",
+    "serve": "vite preview",
+    "tsc": "npx -p typescript tsc \"src/stage/createEdgeStage.js\" --declaration --allowJs --emitDeclarationOnly --outDir types"
+  },
+  "devDependencies": {
+    "@types/cesium": "^1.70.0",
+    "cesium": "^1.87.1",
+    "eslint": "^8.3.0",
+    "eslint-config-mdcs": "^5.0.0",
+    "eslint-plugin-jest": "^25.3.0",
+    "jest": "^27.3.1",
+    "jest-cli": "^27.3.1",
+    "typescript": "^4.5.2",
+    "vite": "^2.6.14",
+    "vite-plugin-cesium": "^1.2.10"
+  }
+}

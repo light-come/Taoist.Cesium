@@ -1,0 +1,30 @@
+{
+    "filesGlob": [
+        "src/**/*.ts"
+    ],
+    "include": ["src/**/*"],
+    "files": [
+        "./index.ts"
+    ],
+    "compileOnSave": false,
+    "compilerOptions": {
+        // 告诉 TypeScript 读取 JS 文件，如
+        // 通常它们作为源文件被忽略
+        "allowJs": true,
+        // 生成d.ts文件
+        "declaration": true,
+        // 这个编译器运行应该
+        // 只输出 d.ts 文件
+        "outDir": "dist/",
+        "moduleResolution": "node",
+        "noImplicitAny": true,
+        "target": "es6",
+        "sourceMap": false,
+        "module": "commonjs",
+        "newLine": "LF"
+    },
+    "exclude": [
+        "node_modules"
+    ]
+}
+

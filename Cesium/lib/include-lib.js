@@ -67,7 +67,7 @@
                 // libpath + "lib/TaoistCore/Taoist.effect-src.js",
                 // libpath + "lib/TaoistCore/Taoist.draw-src.js",
                 // libpath + "lib/TaoistCore/Taoist.measure-src.js",
-                libpath + "among/cesium.among-src.js", 
+                libpath + "among/example.js", 
             ],
         };
 

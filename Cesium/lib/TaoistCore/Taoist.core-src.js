@@ -320,8 +320,9 @@
             imageryOption.maximumTerrainLevel = options.maximumTerrainLevel;
         var layer = new Cesium.ImageryLayer(imageryProvider, imageryOption);
         layer.config = options;
-        viewer.imageryLayers.add(layer);
 
+        console.log(layer)
+        viewer.imageryLayers.add(layer);
         return layer;
     }
     /**

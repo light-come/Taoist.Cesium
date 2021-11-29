@@ -1,0 +1,21 @@
+{
+    "filesGlob": [
+        "src/**/*.ts"
+    ],
+    "files": [
+        "src/index.ts"
+    ],
+    "compileOnSave": false,
+    "compilerOptions": {
+        "outDir": "dist/",
+        "moduleResolution": "node",
+        "noImplicitAny": true,
+        "target": "es6",
+        "sourceMap": false,
+        "module": "commonjs",
+        "newLine": "LF"
+    },
+    "exclude": [
+        "node_modules"
+    ]
+}
