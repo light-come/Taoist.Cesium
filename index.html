@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>R&D</title>
+    <!-- GIS部分 -->
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <script type="text/javascript" src="index.js" libpath="../" include="Taoist"></script>
+  </head>
+  <style>
+    H1{
+      text-align: center;
+    }
+    body{
+      height: auto;
+    }
+    .navigation{
+      height: 250px;
+      width: 61%;
+      border-left: 2px solid #E30808;
+      position: absolute;
+      bottom: 20px;
+      right: 10px;
+    }
+  </style>
+  <body style="height: auto;" scroll="no" id="mapbody">
+    <div>
+      <h1>HELLO WORLD</h1>
+      <style>
+        .map_content {
+          top: 6.5%;
+          width: 61%;
+          height: 62%;
+          margin: 0;
+          padding: 0;
+          right: 10px;
+          overflow: hidden;
+          position: fixed;
+          z-index: -2;
+          border: medium none;
+        }
+      </style>
+      <iframe
+        id="core_content"
+        class="map_content"
+        ref="core_content"
+        title="core_content"
+        src='../example/'
+        sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-downloads"
+        scrolling="auto"
+      ></iframe>
+    </div>
+    <div class="navigation">
+    </div>
+  </body>
+</html>
+
+<article style="max-width: 100%;position: fixed;min-height: 93.5%;padding: 33px 50px 50px 50px;width: 38%;">
+<h2>Autocomplete Demo</h2>
+<form><textarea id="code" name="code">
+
+</textarea></form>
+
+<p>Press <strong>ctrl-space</strong> to activate autocompletion. Built
+on top of the <a href="../doc/manual.html#addon_show-hint"><code>show-hint</code></a>
+and <a href="../doc/manual.html#addon_javascript-hint"><code>javascript-hint</code></a>
+addons.</p>
+
+</article>
