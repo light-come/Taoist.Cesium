@@ -52,57 +52,7 @@
 
       return getProperty(obj);
     }
-    //检测加载
-    InterceptionAndmonitoring() {
-      var open = window.XMLHttpRequest.prototype.open,
-        send = window.XMLHttpRequest.prototype.send;
 
-      function openReplacement(method, url, async, user, password) {
-        this._url = url;
-        return open.apply(this, arguments);
-      }
-
-      function sendReplacement(data) {
-        if (this.onreadystatechange) {
-          this._onreadystatechange = this.onreadystatechange;
-        }
-
-        // console.log('Request sent',  );
-        if (this._url.indexOf('bin') != -1 || this._url.indexOf('gltf') != -1 || this._url.indexOf('glb') != -1) {
-          console.log({
-            heading: '文件加载中',
-            text: '文件可能较大，请耐心等待',
-            position: 'top-center',
-            stack: false,
-          })
-        }
-
-        this.onreadystatechange = onReadyStateChangeReplacement;
-        return send.apply(this, arguments);
-      }
-
-      function onReadyStateChangeReplacement() {
-        // console.log('Ready state changed to: ', this.readyState);
-
-        if (this.readyState == 4)
-          if (this._url.indexOf('bin') != -1 || this._url.indexOf('gltf') != -1 || this._url.indexOf('glb') != -1) {
-            console.log({
-              heading: '加载完成',
-              // text: "加载完成："+this._url,
-              showHideTransition: 'slide',
-              position: 'top-center',
-              icon: 'success',
-            });
-          }
-
-        if (this._onreadystatechange) {
-          return this._onreadystatechange.apply(this, arguments);
-        }
-      }
-
-      window.XMLHttpRequest.prototype.open = openReplacement;
-      window.XMLHttpRequest.prototype.send = sendReplacement;
-    }
     //释放方法
     release() {
       VMSDS.core.findProperties(VMSDS.core, '').forEach((mod) => {
@@ -184,18 +134,57 @@
     //#endregion
    
     //#region 
-      /**
-       * 加载底图
-       */
-      example_addBaseLayer() {
-        G.BaseLayer(this.viewer, {
-          name: '影像底图',
-          type: 'mapbox', //www_google sl_geoq
-          layer: 'blue', //satellite
-          // crs: '4326',
-          brightness: 1,
-        });
+    /**
+     * 加载底图
+     */
+    example_addBaseLayer() {
+      G.BaseLayer(this.viewer, {
+        name: '影像底图',
+        type: 'mapbox', //www_google sl_geoq
+        layer: 'blue', //satellite
+        // crs: '4326',
+        brightness: 1,
+      });
+    }
+    /**
+     * 日照
+     */    
+    example_runshineAnalysis() {
+      var setvisible = G.E.runshineAnalysis();
+      setvisible(this.viewer, 'play'); //stop
+    }
+     /**
+     * 定位摄像头
+     */
+    example_positioning_camera(id) {
+      var 摄像头 = G.Query_X(this.viewer, {
+        type: '摄像头',
+      });
+
+      for (let i = 0; i < 摄像头.length; i++) {
+        const element = 摄像头[i];
+        var selectedColor = new Cesium.Color(1, 1, 1, 0.95);
+        element.color = selectedColor;
+
+        if (element.object.id == id) {
+        
+          var selectedColor = Cesium.Color['Blue'.toUpperCase()].withAlpha(0.7);//new Cesium.Color(0, 1, 0, 1);
+          element.color = selectedColor;
+
+          var camera = (new Function("return " + element.object.camera))();
+
+          Object.assign(camera, {
+            duration: 3,
+            force: true, //强制
+          })
+          G.Go(this.viewer, camera);
+          return true
+        }
       }
+
+      return false
+
+    }
     //#endregion
     
   }

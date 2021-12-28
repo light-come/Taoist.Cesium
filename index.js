@@ -23,6 +23,7 @@ let array = [
   {name:"添加底图"},
   {name:"加载GLTF或GLB模型"},
   {name:"登月动画"},
+  {name:"模型销毁"}
 ]
 for (let index = 0; index < array.length; index++) {
   array[index]["uri"] =  uri+(index+1) + "-"  + version + "-" + encodeURI(array[index].name)
