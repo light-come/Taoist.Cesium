@@ -410,7 +410,7 @@ body {
 }
 
 .overview-close {
-  background: url(../assets/img/close.svg);
+  background: url(/assets/images/close.svg);
   width: 32px;
   height: 32px;
   color: #fff;
@@ -424,7 +424,7 @@ body {
 }
 
 .overview-narrow {
-  background: url(../assets/img/narrow.svg) no-repeat center;
+  background: url(/assets/images/narrow.svg) no-repeat center;
   width: 32px;
   height: 32px;
   color: #fff;
@@ -438,7 +438,7 @@ body {
 }
 
 .overview-enlarge {
-  background: url(../assets/img/enlarge.svg) no-repeat center;
+  background: url(/assets/images/enlarge.svg) no-repeat center;
   width: 32px;
   height: 32px;
   color: #fff;
