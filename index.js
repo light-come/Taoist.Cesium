@@ -24,7 +24,12 @@ let array = [
   {name:"加载GLTF或GLB模型"},
   {name:"登月动画"},
   {name:"模型销毁"},
-  {name:"人物巡逻"}
+  {name:"人物巡逻"},
+  {name:"区域范围"},
+  {name:"场景透明"},
+  {name:"模型运动"},
+  {name:"绘制"},
+  {name:"测量"},
 ]
 for (let index = 0; index < array.length; index++) {
   array[index]["uri"] =  uri+(index+1) + "-"  + version + "-" + encodeURI(array[index].name)
@@ -90,7 +95,7 @@ function init(e) {
       dom.innerHTML = (element.name);
       let p = document.createElement("p")
       p.setAttribute("style", " display:inline; ");
-
+    
       p.appendChild(dom)
       dom.onclick = function () {
         var by = document.getElementById('core_content')

@@ -13,7 +13,7 @@ window.onload = () => {
    */
   function a3DTiles(flyTo, url, _uuid) {
     //添加模型
-    G.a3DTiles(
+    G.aTiles(
       viewer,
       {
         id: _uuid, //生成随机id_

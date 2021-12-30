@@ -105,7 +105,6 @@ window.onload = () => {
               G.U.Get("http://121.40.42.254:8003/sys/get/gis_", function (response) {
                 _build(response, a3DTiles);
               });
-
               //初始化摄像头模型
               _camera();
               //巡逻
@@ -265,7 +264,6 @@ window.onload = () => {
           console.log(wsc, "*");
         }
 
-        // VMSDS.core.Highlight(Gltf)
       }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
 
       let setSelected = (postProcessStage, pickeds) => {

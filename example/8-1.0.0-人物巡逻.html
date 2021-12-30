@@ -48,6 +48,75 @@
   </body>
 </html>
 <script>
+  var a_arr = $("a")
+  for (let index = 0; index < a_arr.length; index++) {
+    const element = a_arr[index];
+    var multiplier = 1
+    element.onclick = function () {
+      console.log(this.innerHTML)
+      var params
+      var options = {}
+      switch (this.innerHTML) {
+        case "上一个点位":
+            params = "JumpTimePoint"
+            options.type = "--"
+          break;
+          case "下一个点位":
+            params = "JumpTimePoint"
+            options.type = "++"
+          break;  
+          case "加速行走":
+            params = "IntelligentRoaming_Speed"
+            options ={
+              multiplier: multiplier++, //当前世界速度 (可整体提高行走速度 必要也可以暂停模型)
+            }
+          break;  
+          case "减速行走":
+            params = "IntelligentRoaming_Speed"
+            options ={
+              multiplier: multiplier--, //当前世界速度 (可整体提高行走速度 必要也可以暂停模型)
+            }
+          break;  
+          case "第一人称":
+            params = "IntelligentRoaming_Visual"
+            options = {
+              visual:{
+                type : 1,
+                height:10.4 * 2,
+                direction : -35 * 2.5,
+              }
+            }//视角 0是无绑定 1是第一人称 3是第三人称 2是跟随
+          break;  
+          case "第三人称":
+            params = "IntelligentRoaming_Visual"
+            options = {
+              visual:{
+                type : 3,
+                height:10.4 * 2,
+                direction : -35 * 2.5,
+              }
+            }//视角 0是无绑定 1是第一人称 3是第三人称 2是跟随
+          break;
+          case "上帝视角":
+            params = "IntelligentRoaming_Visual"
+            options = {
+              visual:{
+                type : 0,
+                height:10.4 * 2,
+                direction : -35 * 2.5,
+              }
+            }//视角 0是无绑定 1是第一人称 3是第三人称 2是跟随
+          break;
+          case "结束巡逻":
+            params = "IntelligentRoaming_Destroy"
+          break;
+        default:
+          break;
+      }
+
+      new Gear(viewer)[params](options)
+    }
+  }
   setTimeout(() => {
     var by = document.getElementById("travelscope");
     if (by) by.setAttribute("class", "visible");
