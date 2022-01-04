@@ -14,7 +14,7 @@ function init(viewer) {
   G.BaseLayer(viewer,{
     name: '影像底图',
     type: 'mapbox',//www_google sl_geoq
-    layer: 'navigation',
+    layer: 'satellite',
     // crs: '4326',
     brightness: 0
   })//添加底图

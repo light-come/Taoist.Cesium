@@ -91,8 +91,9 @@
     }
     //更新指引内容
     setText(params, title) {
-      if (title) this.setTitle(title);
+     if (title) this.setTitle(title); 
       let doc = document.getElementsByClassName("notes")[0];
+      if(doc == null) return 
       if (!title) doc.innerHTML = "操作指引<br>";
 
       for (let index = 0; index < params.length; index++) {
@@ -107,6 +108,7 @@
     //更新指引标题
     setTitle(params) {
       let travelscope = document.getElementById("travelscope");
+      if(travelscope == null) return 
       travelscope.innerHTML = params.title;
       let dom = document.createElement("div");
       dom.setAttribute("class", "notes");
@@ -235,19 +237,20 @@
       viewer.clock.worldSpeedCache = viewer.clock.multiplier;
     }
     //视角
-    IntelligentRoaming_Visual(options, _entity) {
+    IntelligentRoaming_Visual(options) {
       const viewer = this.viewer;
 
       viewer.scene.postUpdate.removeEventListener(viewer.IntelligentRoaming_VisualEvent);
       viewer.camera.lookAtTransform(Cesium.Matrix4.IDENTITY);
       viewer.trackedEntity = undefined;
-
       var entity = null
 
-      var array = G.Query_X(viewer, {type: "IntelligentRoaming", })
+      var array = G.Query_X(viewer, {type: "IntelligentRoaming"})
+      console.log(array)
+
       for (let index = 0; index < array.length; index++) {
         const element = array[index];
-      
+     
         if(element.id == "Will I still be able to use data roaming after I have NO!"){
           entity = element
         }
@@ -1364,8 +1367,6 @@
         var model = viewer.scene.pick(movement.position); //选取当前的entity;
         if (model && Cesium.defined(model.tileset)) {
           model = model.tileset;
-          console.log(model)
-         
         }
       }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
 
@@ -1557,11 +1558,6 @@
             $('canvas').css('cursor', 'default'); //鼠标小手换成箭头
           }
           
-          
-          // console.log(model)
-         
-
-            
         }
       }
       document.onmousemove = mouseMove;
@@ -2209,6 +2205,352 @@
     example_edit_release(){
       G.entities.Release(this.viewer)
     }
+
+    /**
+     * 添加导航控件
+     */
+    example_addNavigation() {
+      G.C.NavigationBox(this.viewer, {
+          x: 0,
+          y: 0,
+          z: 10000,
+          heading: 0,
+          pitch: 0,
+          roll: 0
+      });
+    }
+    /**
+     * 添加鼠标控件
+     */
+    example_addPositionBox() {
+      G.C.MousePositionBox(this.viewer,'mapBox');
+    }
+
+    /**
+     * 着色器下雪
+     */
+    example_snowSystem_Shaders(){
+      this.Snow = this.Snow == null ?  new G.E.Effect(this.viewer, {
+          visibility: 0.2,
+          show:false,
+          type:'x',
+          color: new Cesium.Color.fromCssColorString("#e7e7e7")//new Cesium.Color(0.8, 0.8, 0.8, 0.3)
+      }) : this.Snow;//雪
+      if(!this.Snow._show)  this.Snow.show(true); else  this.Snow.show(false);
+      return this.Snow;
+    }
+    /**
+     * 着色器下雨
+     */
+    example_RainwaterSystem_Shaders(){
+        this.Rain = this.Rain == null ?  new G.E.Effect(this.viewer, {
+            visibility: 0.2,
+            show:false,
+            type:'y',
+            color: new Cesium.Color.fromCssColorString("#e7e7e7")//new Cesium.Color(0.8, 0.8, 0.8, 0.3)
+        }) : this.Rain;//雨
+        if(!this.Rain._show)  this.Rain.show(true); else  this.Rain.show(false);
+        return this.Rain;
+    }
+    /**
+     * 着色器雾
+     */
+    example_Fogging(){
+        this.Fog = this.Fog == null ?  new G.E.Effect(this.viewer, {
+            visibility: 0.2,
+            show:false,
+            type:'w',
+            color: new Cesium.Color.fromCssColorString("#e7e7e7")//new Cesium.Color(0.8, 0.8, 0.8, 0.3)
+        }) : this.Fog;//雾
+        if(!this.Fog._show)  this.Fog.show(true); else  this.Fog.show(false);
+        return this.Fog;
+    }
+
+    /**
+     * 漫游探高
+     */
+    example_IntelligentRoamingV2() {
+      const viewer = this.viewer;
+      var timer = 10; //模型行走数度
+
+      var FineBezierTimer = 0.01; //算法路径速度
+
+      var multiplier = 0.7 ; //当前世界速度 (可整体提高行走速度 必要也可以暂停模型)
+
+      var xyList = [
+        {x: 120.37063197564044, y: 29.99411991794387,   z: -0}
+        ,{x: 120.36958684743908, y: 29.995376752897222, z: -0}
+        ,{x: 120.36965864539354, y: 29.995894284404972, z: -0}
+        ,{x: 120.36998604974082, y: 29.996108457100856, z: -0}
+        ,{x: 120.37083091258253, y: 29.99547889856467, z:  -0}
+        ,{x: 120.37066343919086, y: 29.99413122161608, z:  -0}
+      ];
+
+      var xyFineBezier = [];
+      var q = Cesium.Cartesian3.fromDegrees(xyList[0].x, xyList[0].y, 10);
+      q.time = timer;
+      xyFineBezier.push(q);
+      for (let index = 0; index < xyList.length; index++) {
+        const element1 = xyList[index];
+        const element2 = xyList[index + 1];
+        const element3 = xyList[index + 2];
+        if (element3 == null) {
+          break;
+        }
+        var a = element1.x - element2.x;
+        var b = element1.y - element2.y;
+        var c = element2.x + a / 40;
+        var d = element2.y + b / 40;
+
+        var e = element2.x - element3.x;
+        var f = element2.y - element3.y;
+        var g = element2.x - e / 40;
+        var h = element2.y - f / 40;
+
+        var dc = new G.M.DrawCurve(Cesium, viewer);
+        var line = dc.fineBezier(Cesium.Cartesian3.fromDegreesArray([c, d, element2.x, element2.y, element2.x, element2.y, g, h]), 180); //180为弯道点的密度 适当调整可控制转弯速度
+
+        line[0].time = FineBezierTimer;
+        line[line.length - 1].time = timer;
+        line.forEach((element) => {
+          xyFineBezier.push(element);
+        });
+      }
+
+      xyFineBezier.push(Cesium.Cartesian3.fromDegrees(xyList[xyList.length - 1].x, xyList[xyList.length - 1].y, 10));
+
+      var arr = [];
+      var i = 0;
+      xyList.forEach((e) => {
+        arr.push(e.x, e.y);
+      });
+      var alp = 1;
+      var num = 0;
+      viewer.entities.add({
+        type: 'IntelligentRoaming',
+        polyline: {
+          positions: xyFineBezier, //Cesium.Cartesian3.fromDegreesArray(arr),
+          width: 26,
+          material: new Cesium.PolylineGlowMaterialProperty({
+            //发光线
+            glowPower: 0.1,
+            color: new Cesium.CallbackProperty(function () {
+              if (num % 2 === 0) {
+                alp -= 0.005;
+              } else {
+                alp += 0.005;
+              }
+
+              if (alp <= 0.2) {
+                num++;
+              } else if (alp >= 1) {
+                num++;
+              }
+              return Cesium.Color.ORANGE.withAlpha(alp);
+              //entity的颜色透明 并不影响材质，并且 entity也会透明
+            }, false),
+          }),
+          clampToGround: true,
+        },
+      });
+
+      // 动态线
+      // VMSDS.effect.DynamicLine(viewer,arr)
+
+      function getTimeList(xyList) {
+        var FlightRoamingData = []; //人物漫游时路线数据存储
+        var cameraTimer = '00:00:00';
+        var mm = timer; //一截路的时长
+        for (let index = 0; index < xyList.length; index++) {
+          if (Cesium.defined(xyList[index].time)) {
+            mm = xyList[index].time;
+          }
+
+          const element = xyList[index];
+
+          FlightRoamingData.push({
+            id: 'roaming_' + index,
+            x: element.x,
+            y: element.y,
+            z: element.z,
+            time: ISODateString(new Date()),
+            ss: 20, // 停留的时长
+          });
+          var hour = cameraTimer.split(':')[0];
+          var min = cameraTimer.split(':')[1];
+          var sec = cameraTimer.split(':')[2];
+          var s = Number(hour * 3600) + Number(min * 60) + Number(sec); //加当前相机时间
+          function formatTime(s) {
+            var t;
+            if (s > -1) {
+              var hour = Math.floor(s / 3600);
+              var min = Math.floor(s / 60) % 60;
+              var sec = s % 60;
+              if (hour < 10) {
+                t = '0' + hour + ':';
+              } else {
+                t = hour + ':';
+              }
+
+              if (min < 10) {
+                t += '0';
+              }
+              t += min + ':';
+              if (sec < 10) {
+                t += '0';
+              }
+              t += sec.toFixed(2);
+            }
+            return t;
+          }
+          cameraTimer = formatTime(s + mm);
+          function ISODateString(d) {
+            function pad(n) {
+              return n < 10 ? '0' + n : n;
+            }
+            return d.getUTCFullYear() + '-' + pad(d.getUTCMonth() + 1) + '-' + pad(d.getUTCDate()) + 'T' + cameraTimer + 'Z';
+          }
+        }
+        return FlightRoamingData;
+      }
+
+      xyList = Cesium.Cartesian3.fromDegreesArray(arr);
+      var FlightRoamingData = getTimeList(xyFineBezier); //xyFineBezier
+
+      var gltf_uri = 'http://121.40.42.254:8008/%E4%BA%BA%E7%89%A9%E7%8E%AF%E6%A8%A1%E5%9E%8B/%E4%BA%BA%E7%89%A9/%E7%99%BD%E8%86%9C%E8%A1%8C%E8%B5%B0/scene.gltf';
+    
+      var czml = [
+        {
+          id: 'document',
+          version: '1.0',
+          clock: {
+            interval: '2018-07-19T15:18:00Z/2018-07-19T15:18:30Z',
+            currentTime: '2018-07-19T15:18:00Z',
+            multiplier: 1,
+            range: 'LOOP_STOP',
+            step: 'SYSTEM_CLOCK_MULTIPLIER',
+          },
+        },
+        {
+          id: 'Will I still be able to use data roaming after I have NO!',
+          model: {
+            gltf: gltf_uri,
+            scale: 0.1,
+          },
+          position: {
+            interpolationAlgorithm: 'LINEAR',
+            forwardExtrapolationType: 'HOLD',
+            cartesian: [],
+          },
+          orientation: {
+            unitQuaternion: [],
+          },
+        },
+      ];
+
+      czml[1].model.scale = 0.01;
+
+      //添加地形分析及模型行为
+      // console.log(Cesium.Transforms.headingPitchRollQuaternion(position, hpr))
+      var tileset;
+      
+      for (var i = 0; i < viewer.scene.primitives.length; i++) {
+        var model = viewer.scene.primitives.get(i);
+        if (model.object&&model.object.type == "山体") {
+          tileset = model;
+        }
+      }
+
+      var entity = G.aGR(viewer, czmlRoaming(FlightRoamingData, czml), tileset, true);
+      if (!entity) return;
+      //自动计算模型朝向
+      var data = FlightRoamingData;
+      var property = new Cesium.SampledPositionProperty();
+      for (var i = 0, len = data.length; i < len; i++) {
+        var item = data[i];
+
+        var lng = item.x;
+        var lat = item.y;
+        var hei = item.z;
+        var time = item.time;
+
+        var position = null;
+        if (lng && lat) position = Cesium.Cartesian3.fromDegrees(lng, lat, hei);
+
+        var juliaDate = null;
+        if (time) juliaDate = Cesium.JulianDate.fromIso8601(time);
+
+        if (position && juliaDate) property.addSample(juliaDate, position);
+      }
+
+      entity.position = property;
+      entity.orientation = new Cesium.VelocityOrientationProperty(property);
+      entity.model.silhouetteColor = Cesium.Color.GREEN; //new Cesium.Color( 1.0 ,  0 ,  0 ,  1.0 );
+      entity.model.silhouetteSize = 3.0;
+      entity.type = 'IntelligentRoaming';
+      viewer.clock.multiplier = multiplier;
+      function czmlRoaming(position, czml) {
+        var p = [];
+        //    console.log(clock)//Cesium.JulianDate.fromDate(new Date());
+        var _start;
+        var _stop;
+        var property = new Cesium.SampledPositionProperty();
+        //debugger;
+        for (var i = 0, len = position.length; i < len; i++) {
+          var item = position[i];
+          var cartographic = Cesium.Cartographic.fromCartesian(item);
+          var lng = Cesium.Math.toDegrees(cartographic.longitude);
+          var lat = Cesium.Math.toDegrees(cartographic.latitude);
+          var mapPosition = { x: lng, y: lat, z: cartographic.height };
+          item.x = mapPosition.x;
+          item.y = mapPosition.y;
+          item.z = mapPosition.z;
+  
+          var lng = Number(item.x.toFixed(6));
+          var lat = Number(item.y.toFixed(6));
+          var hei = item.z;
+          var time = item.time;
+  
+          var _position = null;
+          if (lng && lat) _position = Cesium.Cartesian3.fromDegrees(lng, lat, hei);
+  
+          var juliaDate = null;
+          if (time) juliaDate = Cesium.JulianDate.fromIso8601(time);
+  
+          if (_position && juliaDate) property.addSample(juliaDate, _position);
+  
+          if (i == 0) _start = juliaDate;
+          else if (i == len - 1) _stop = juliaDate;
+        }
+        // console.log(_start.clone().toString())
+  
+        /* Use a function for the exact format desired... */
+        function ISODateString(d) {
+          function pad(n) {
+            return n < 10 ? '0' + n : n;
+          }
+          return d.getUTCFullYear() + '-' + pad(d.getUTCMonth() + 1) + '-' + pad(d.getUTCDate()) + 'T' + pad(d.getUTCHours()) + ':' + pad(d.getUTCMinutes()) + ':' + pad(d.getUTCSeconds()) + 'Z';
+        }
+  
+        czml[0].clock.interval = ISODateString(new Date(_start.clone().toString())) + '/' + ISODateString(new Date(_stop.clone().toString()));
+        czml[0].clock.startTime = ISODateString(new Date(_start.clone().toString()));
+        czml[0].clock.stopTime = ISODateString(new Date(_stop.clone().toString()));
+        czml[0].clock.currentTime = ISODateString(new Date(_start.clone().toString()));
+        czml[0].clock.clockRange = Cesium.ClockRange.LOOP_STOP;
+        czml[0].clock.multiplier = 1.0;
+  
+        for (let index = 0; index < position.length; index++) {
+          const element = position[index];
+          var cartesian = Cesium.Cartesian3.fromDegrees(element.x, element.y, 10);
+          p.push(ISODateString(new Date(element.time)), cartesian.x, cartesian.y, cartesian.z);
+        }
+        //    console.log(p)
+        czml[1].position.cartesian = p;
+        //    console.log(czml,czml[1].position.cartesian)
+        return czml;
+      }
+    }
+        
     //#endregion
   }
 

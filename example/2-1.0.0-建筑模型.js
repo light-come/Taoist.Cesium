@@ -21,10 +21,10 @@ window.onload = () => {
         flyTo,
         heightOffset: 0,
         height: 10,
-      },
-      {
-        color: "color('white', 1)",
-        show: true,
+        style: {
+          color: "color('white', 1)",
+          show: true,
+        }
       }
     );
   }

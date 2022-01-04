@@ -86,7 +86,6 @@ window.onload = () => {
             success: function (_viewer) {
               window.viewer = _viewer;
               G.sTime(_viewer);
-              _("example_runshineAnalysis"); //日照
 
               _viewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
               // _viewer.scene.globe.show = false;
@@ -105,6 +104,9 @@ window.onload = () => {
               _camera();
               //销毁模型
               _byeModel();
+              //日照
+              _("example_runshineAnalysis");
+
             },
           },
           Cesium

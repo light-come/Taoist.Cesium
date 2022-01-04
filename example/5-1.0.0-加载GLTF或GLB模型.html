@@ -24,30 +24,37 @@
       </h2>
     </div>
 
-    <script>
-      let gear = new Gear();
-      setTimeout(() => {
-        var by = document.getElementById('travelscope');
-        if (by) by.setAttribute('class', 'visible');
-      }, 1000);
+    <div id="file-page-container" style="width: 100%; position: absolute; height: 100%; z-index: 1; background-color: #181818c2">
+      <span class="loader-119" style="color: #fff;position: absolute; top: 50%; left: 47%;text-shadow: 2px 2px 2px #000;">Loading...</span>
+      <span id="file-page-percent" style="color: #fff; position: absolute; top: 53%; left: 48%; text-shadow: 2px 2px 2px #000">0%</span>
+    </div>
 
-      setTimeout(() => {
-        var by = document.getElementById('travelscope');
-        if (by) by.setAttribute('top', '30px');
-        gear.setText(
-          [
-            {
-              name: '操作指引:脱离动画',
-              text: '围绕模型动画 / 双击界面摆脱控制',
-            },
-          ],
-          {
-            text: '',
-            title: '当前状态：加载动画',
-          }
-        );
-      }, 3000);
-    </script>
+
     <div class="map-container" style="z-index: 999" id="mapBox"></div>
   </body>
 </html>
+
+<script>
+  let gear = new Gear();
+  setTimeout(() => {
+    var by = document.getElementById('travelscope');
+    if (by) by.setAttribute('class', 'visible');
+  }, 1000);
+
+  setTimeout(() => {
+    var by = document.getElementById('travelscope');
+    if (by) by.setAttribute('top', '30px');
+    gear.setText(
+      [
+        {
+          name: '操作指引:脱离动画',
+          text: '围绕模型动画 / 双击界面摆脱控制',
+        },
+      ],
+      {
+        text: '',
+        title: '当前状态：加载动画',
+      }
+    );
+  }, 3000);
+</script>

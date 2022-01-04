@@ -29,7 +29,11 @@ let array = [
   {name:"场景透明"},
   {name:"模型运动"},
   {name:"绘制"},
-  {name:"测量"},
+  {name:"测量"}, 
+  {name:"内置控件"}, 
+  {name:"天气模拟"}, 
+  {name:"带你去爬山"},
+  {name:"旋转控件"},
 ]
 for (let index = 0; index < array.length; index++) {
   array[index]["uri"] =  uri+(index+1) + "-"  + version + "-" + encodeURI(array[index].name)

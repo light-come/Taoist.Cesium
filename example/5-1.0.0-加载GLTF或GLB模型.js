@@ -21,6 +21,33 @@ function init(viewer) {
     })
 
    G.sTime(viewer)
+
+    if (true) {
+      //资源全部加载后飞行 防止卡顿
+      var state = false;//var percent_state = false//非b3dm加载不需要使用这个
+      G.IA(
+        function (start) {},
+        function (end) {
+          state = false;
+          setTimeout(() => {
+            state = true;
+          }, 500);
+          // console.log(end)
+        },
+        function (percent) {
+          $("#file-page-percent").html(percent)
+          // if(percent == "100%")percent_state = true
+        }
+      );
+      var interva = setInterval(() => {
+        if (state) {// && percent_state
+          console.log("刷新完成");
+          $("#file-page-container").fadeToggle(3000);
+          clearInterval(interva);
+        }
+      }, 1000);
+    }
+  
    //环境模型
     var GLTF = G.aGLTF(viewer,{
     url:  'http://121.40.42.254:8008/%E4%BA%BA%E7%89%A9%E7%8E%AF%E6%A8%A1%E5%9E%8B/%E7%89%A9%E4%BD%93/%E4%B8%AD%E5%9B%BD%E9%A3%8E/chinese-shirt-agisoftclotheschallenge/a.glb',
