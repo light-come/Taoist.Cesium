@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🌏I code and sometimes paint when I have time.🌏</title>
+    <!-- 实列 -->
+    <script type="text/javascript" src="./18-1.0.0-人物漫游.js"></script>
+</head>
+
+<body>
+  <div id="top-overlay">
+    <div class="background"></div>
+    
+    <h2 id="travelscope">
+      当前模块：<b>漫游行走</b>. 
+    </h2>
+  </div>
+
+  <div class="map-container" style="z-index: 999;" id="mapBox"></div>
+</body>
+
+</html>
+<script>
+
+  let gear = new Gear();
+  setTimeout(() => {
+    var by = document.getElementById('travelscope');
+    if (by) by.setAttribute('class', 'visible');
+  }, 1000);
+ 
+</script>

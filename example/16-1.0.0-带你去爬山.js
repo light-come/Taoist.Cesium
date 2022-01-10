@@ -55,7 +55,7 @@ const _ = (params, options, _viewer) => {
   }
 
   // var tileset = G.aGLTF(viewer,{
-  //   url: 'http://192.168.2.17:8077/%E4%BA%BA%E7%89%A9%E7%8E%AF%E6%A8%A1%E5%9E%8B/%E7%8E%AF%E5%A2%83/%E9%9B%AA%E5%B1%B1/source/800003c6-0006-f100-b63f-84710c7967bb.glb',//'http://121.40.42.254:8008/%E4%BA%BA%E7%89%A9%E7%8E%AF%E6%A8%A1%E5%9E%8B/%E7%8E%AF%E5%A2%83/%E9%9B%AA%E5%B1%B1/source/800003c6-0006-f100-b63f-84710c7967bb.glb',
+  //   url: (Debug?local:server) + '/%E4%BA%BA%E7%89%A9%E7%8E%AF%E6%A8%A1%E5%9E%8B/%E7%8E%AF%E5%A2%83/%E9%9B%AA%E5%B1%B1/source/800003c6-0006-f100-b63f-84710c7967bb.glb',//'http://121.40.42.254:8008/%E4%BA%BA%E7%89%A9%E7%8E%AF%E6%A8%A1%E5%9E%8B/%E7%8E%AF%E5%A2%83/%E9%9B%AA%E5%B1%B1/source/800003c6-0006-f100-b63f-84710c7967bb.glb',
   //   scale:1.0,
   //   position:{
   //     x:120.37036851640701
@@ -67,7 +67,7 @@ const _ = (params, options, _viewer) => {
 
   var tileset = G.aTiles(viewer, {
     type: "山体",
-    url: 'http://192.168.2.17:8077/%E4%BA%BA%E7%89%A9%E7%8E%AF%E6%A8%A1%E5%9E%8B/%E7%8E%AF%E5%A2%83/%E5%87%8C%E5%8E%89%E7%9A%84%E5%B1%B1%E5%8C%BA%E7%99%BD%E8%86%9C/tileset/tileset.json', 
+    url: (Debug?local:server) + '/%E4%BA%BA%E7%89%A9%E7%8E%AF%E6%A8%A1%E5%9E%8B/%E7%8E%AF%E5%A2%83/%E5%87%8C%E5%8E%89%E7%9A%84%E5%B1%B1%E5%8C%BA%E7%99%BD%E8%86%9C/tileset/tileset.json', 
     flyTo: true,
     heightOffset: 0,
     height: 80,

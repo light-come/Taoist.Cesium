@@ -9,7 +9,6 @@ var script = [' <script type="text/javascript" src="/example/example.js"></scrip
 ,'<script src="/lib/plugins/codemirror-5.14.2/addon/hint/javascript-hint.js"></script>'
 ,'<script src="/lib/plugins/codemirror-5.14.2/mode/javascript/javascript.js"></script>'
 ,'<script src="/lib/plugins/codemirror-5.14.2/mode/markdown/markdown.js"></script>'
-
 ];
 script.forEach(element => {
   document.writeln(element);
@@ -34,6 +33,7 @@ let array = [
   {name:"天气模拟"}, 
   {name:"带你去爬山"},
   {name:"旋转控件"},
+  {name:"人物漫游"},
 ]
 for (let index = 0; index < array.length; index++) {
   array[index]["uri"] =  uri+(index+1) + "-"  + version + "-" + encodeURI(array[index].name)

@@ -15,6 +15,9 @@
       this.Snow = null; //雪
       this.Fog = null; //雾
 
+      window.Debug = false//是否为调试模式
+      window.local = 'http://127.0.0.1:8077'
+      window.server = 'http://121.40.42.254:8008/'
     }
 
     //#region example
@@ -88,32 +91,6 @@
         var _index = getQueryVariable();
         if (e) e(_index);
       }
-    }
-    //更新指引内容
-    setText(params, title) {
-     if (title) this.setTitle(title); 
-      let doc = document.getElementsByClassName("notes")[0];
-      if(doc == null) return 
-      if (!title) doc.innerHTML = "操作指引<br>";
-
-      for (let index = 0; index < params.length; index++) {
-        const element = params[index];
-        let dom = document.createElement("p");
-        dom.setAttribute("style", " font-weight: 700; ");
-        dom.innerHTML = element.name;
-        doc.appendChild(dom);
-        doc.innerHTML += element.text + "<br>";
-      }
-    }
-    //更新指引标题
-    setTitle(params) {
-      let travelscope = document.getElementById("travelscope");
-      if(travelscope == null) return 
-      travelscope.innerHTML = params.title;
-      let dom = document.createElement("div");
-      dom.setAttribute("class", "notes");
-      dom.innerHTML = params.text + "<br>";
-      travelscope.appendChild(dom);
     }
 
     uuid() {
@@ -196,9 +173,9 @@
       viewer.scene.postRender.removeEventListener(viewer.IntelligentRoaming_EventListener); //接触移动计算事件
 
       viewer.scene.preRender.removeEventListener(viewer.roamingBubbles);
-      $('#htmlOverlay').hide(); //漫游气泡
+      $("#htmlOverlay").hide(); //漫游气泡
 
-      $('.overview-close').click();
+      $(".overview-close").click();
       /**
        * 视角释放
        */
@@ -209,7 +186,7 @@
        * 销毁路径 及 人物模型
        */
       var mods = G.Query_X(viewer, {
-        type: 'IntelligentRoaming',
+        type: "IntelligentRoaming",
       });
       if (mods.length >= 1) {
         mods.forEach(element => {
@@ -220,7 +197,7 @@
        * 销毁路径 及 人物模型
        */
       var mods = G.Query_X(viewer, {
-        type: 'IntelligentRoamingV2',
+        type: "IntelligentRoamingV2",
       });
       if (mods.length >= 1) {
         mods.forEach(element => {
@@ -243,16 +220,16 @@
       viewer.scene.postUpdate.removeEventListener(viewer.IntelligentRoaming_VisualEvent);
       viewer.camera.lookAtTransform(Cesium.Matrix4.IDENTITY);
       viewer.trackedEntity = undefined;
-      var entity = null
+      var entity = null;
 
-      var array = G.Query_X(viewer, {type: "IntelligentRoaming"})
-      console.log(array)
+      var array = G.Query_X(viewer, { type: "IntelligentRoaming" });
+      console.log(array);
 
       for (let index = 0; index < array.length; index++) {
         const element = array[index];
-     
-        if(element.id == "Will I still be able to use data roaming after I have NO!"){
-          entity = element
+
+        if (element.id == "Will I still be able to use data roaming after I have NO!") {
+          entity = element;
         }
       }
       if (entity == null) {
@@ -262,7 +239,7 @@
         type: 2,
         zoomTo: false,
       }; //视角 0是无绑定 1是第一人称 3是第三人称 2是跟随
-       
+
       viewer.IntelligentRoaming_VisualEvent = function (scene, time) {
         if (!Cesium.defined(entity.position)) {
           return;
@@ -1144,11 +1121,11 @@
         _this.IntelligentRoamingDynamicLine(viewer, element);
       });
 
-      var uri = "http://192.168.2.17:8077/%E4%BA%BA%E7%89%A9%E7%8E%AF%E6%A8%A1%E5%9E%8B/%E4%BA%BA%E7%89%A9/%E7%99%BD%E8%86%9C%E8%A1%8C%E8%B5%B0/scene.gltf";
+      var uri = (Debug?local:server) + "/%E4%BA%BA%E7%89%A9%E7%8E%AF%E6%A8%A1%E5%9E%8B/%E4%BA%BA%E7%89%A9/%E7%99%BD%E8%86%9C%E8%A1%8C%E8%B5%B0/scene.gltf";
       var _options = { positions: FR_CURVE };
       _options.url = uri;
       _options.scale = 0.01;
-      console.log(FR_CURVE)
+      console.log(FR_CURVE);
       var entity = G.aFR(viewer, _options);
       entity.path = {
         show: true,
@@ -1161,7 +1138,7 @@
           color: Cesium.Color.GREEN.withAlpha(1),
         }),
       };
-      entity.type = "IntelligentRoaming"
+      entity.type = "IntelligentRoaming";
 
       //处理运动过程
       var _position = entity.position;
@@ -1262,7 +1239,7 @@
 
           console.log("园外判断成立");
         }
-      }
+      };
       viewer.scene.postRender.addEventListener(viewer.IntelligentRoaming_EventListener);
 
       function app_viewer(e) {
@@ -1305,13 +1282,13 @@
 
     //场景透明可视化
     example_TransparentVisualization() {
-      var viewer = this.viewer; console.log(viewer.scene.primitives)
+      var viewer = this.viewer;
+      console.log(viewer.scene.primitives);
       for (var i = 0; i < viewer.scene.primitives.length; i++) {
-      
-          var defaultStyle = new Cesium.Cesium3DTileStyle({
-            color: "color('white', 0.08)",
-          });
-          viewer.scene.primitives.get(i).style = defaultStyle;
+        var defaultStyle = new Cesium.Cesium3DTileStyle({
+          color: "color('white', 0.08)",
+        });
+        viewer.scene.primitives.get(i).style = defaultStyle;
       }
 
       for (var i = 0; i < viewer.scene.primitives.length; i++) {
@@ -1323,38 +1300,38 @@
           color: "color('white', 1)",
         });
         var shapeType;
-        if (str.indexOf('DX') != -1) {
-          shapeType = '地面';
-        } else if (str.indexOf('SB') != -1) {
-          shapeType = '设备';
+        if (str.indexOf("DX") != -1) {
+          shapeType = "地面";
+        } else if (str.indexOf("SB") != -1) {
+          shapeType = "设备";
           model.style = defaultStyle;
-        } else if (str.indexOf('JZSW') != -1) {
-          shapeType = '室外建筑';
-        } else if (str.indexOf('JZ') != -1) {
-          shapeType = '建筑';
-        } else if (str.indexOf('LH') != -1) {
-          shapeType = '绿化';
-        } else if (str.indexOf('XP') != -1) {
-          shapeType = '其他';
+        } else if (str.indexOf("JZSW") != -1) {
+          shapeType = "室外建筑";
+        } else if (str.indexOf("JZ") != -1) {
+          shapeType = "建筑";
+        } else if (str.indexOf("LH") != -1) {
+          shapeType = "绿化";
+        } else if (str.indexOf("XP") != -1) {
+          shapeType = "其他";
         } else {
           shapeType = str;
         }
         // /DX/11/
         // /DX/16/
-        if (str.indexOf('设备') != -1 || str.indexOf('/DX/11/') != -1 || str.indexOf('/DX/16/') != -1) {
+        if (str.indexOf("设备") != -1 || str.indexOf("/DX/11/") != -1 || str.indexOf("/DX/16/") != -1) {
           model.style = defaultStyle;
         }
 
         var pid;
         pid = model.object.pId;
         // 93
-        if (pid == '93') {
+        if (pid == "93") {
           var defaultStyle = new Cesium.Cesium3DTileStyle({
             color: "color('white', 1)",
           });
           model.style = defaultStyle;
         }
-        if (pid == '94') {
+        if (pid == "94") {
           var defaultStyle = new Cesium.Cesium3DTileStyle({
             color: "color('white', 1)",
           });
@@ -1363,14 +1340,11 @@
       }
       var handlers = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
       handlers.setInputAction(function (movement) {
-       
         var model = viewer.scene.pick(movement.position); //选取当前的entity;
         if (model && Cesium.defined(model.tileset)) {
           model = model.tileset;
         }
       }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
-
-      
     }
 
     /**
@@ -1451,13 +1425,13 @@
       viewer.scene.primitives.add(primitive);
 
       viewer.entities.add({
-        name: 'lSelectWay',
+        name: "lSelectWay",
         position: Cesium.Cartesian3.fromDegrees(120.26633405804266, 30.294244491108742, 12),
         label: {
           scale: 0.8,
-          text: '管理范围线',
-          font: '18px sans-serif',
-          fillColor: Cesium.Color.fromCssColorString('#fd0000'),
+          text: "管理范围线",
+          font: "18px sans-serif",
+          fillColor: Cesium.Color.fromCssColorString("#fd0000"),
           style: Cesium.LabelStyle.FILL_AND_OUTLINE,
           outlineWidth: 3,
           verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
@@ -1471,13 +1445,13 @@
       });
 
       viewer.entities.add({
-        name: 'lSelectWay',
+        name: "lSelectWay",
         position: Cesium.Cartesian3.fromDegrees(120.26610507449006, 30.294172674282486, 12),
         label: {
           scale: 0.8,
-          text: '保护范围线',
-          font: '18px sans-serif',
-          fillColor: Cesium.Color.fromCssColorString('#4395ff'),
+          text: "保护范围线",
+          font: "18px sans-serif",
+          fillColor: Cesium.Color.fromCssColorString("#4395ff"),
           style: Cesium.LabelStyle.FILL_AND_OUTLINE,
           outlineWidth: 2,
           verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
@@ -1489,7 +1463,6 @@
           anchor: [0, -12],
         },
       });
-
     }
 
     /**
@@ -1497,7 +1470,7 @@
      */
     example_PumpStructure() {
       var viewer = this.viewer;
-      
+
       function mouseMove(ev) {
         if (viewer.RoamingStatus == true) {
           return;
@@ -1516,35 +1489,33 @@
           var shapeType;
           var str = decodeURI(model._url);
 
-          if (str.indexOf('DX') != -1) {
-            shapeType = '地面';
-          } else if (str.indexOf('SB') != -1) {
-            shapeType = '设备';
-          } else if (str.indexOf('JZSW') != -1) {
-            shapeType = '室外建筑';
-          } else if (str.indexOf('JZ') != -1) {
-            shapeType = '建筑';
-          } else if (str.indexOf('LH') != -1) {
-            shapeType = '绿化';
-          } else if (str.indexOf('XP') != -1) {
-            shapeType = '小品';
+          if (str.indexOf("DX") != -1) {
+            shapeType = "地面";
+          } else if (str.indexOf("SB") != -1) {
+            shapeType = "设备";
+          } else if (str.indexOf("JZSW") != -1) {
+            shapeType = "室外建筑";
+          } else if (str.indexOf("JZ") != -1) {
+            shapeType = "建筑";
+          } else if (str.indexOf("LH") != -1) {
+            shapeType = "绿化";
+          } else if (str.indexOf("XP") != -1) {
+            shapeType = "小品";
           } else {
             shapeType = str;
           }
-          if (str.indexOf('设备') != -1) {
-            shapeType = '设备';
+          if (str.indexOf("设备") != -1) {
+            shapeType = "设备";
           }
           for (var i = 0; i < viewer.scene.primitives.length; i++) {
             var _model = viewer.scene.primitives.get(i);
-            if(_model._defaultStyle)
-            {
+            if (_model._defaultStyle) {
               // console.log(_model)
               _model.style = _model._defaultStyle;
             }
           }
 
-          if (shapeType == '设备') {
-
+          if (shapeType == "设备") {
             //包含该元素,鼠标变成手势
             model._defaultStyle = new Cesium.Cesium3DTileStyle({
               color: "color('white', 1)",
@@ -1553,68 +1524,65 @@
               color: "color('#adadad', 0.5)", //方案三 鼠标触发颜色
             });
             model.style = defaultStyle;
-            $('canvas').css('cursor', 'pointer'); //鼠标箭头换成小手
+            $("canvas").css("cursor", "pointer"); //鼠标箭头换成小手
           } else {
-            $('canvas').css('cursor', 'default'); //鼠标小手换成箭头
+            $("canvas").css("cursor", "default"); //鼠标小手换成箭头
           }
-          
         }
       }
       document.onmousemove = mouseMove;
 
-      function TestURI(model){
-        var str = model._url
-        if(!str)return false
-        var uuid = false
+      function TestURI(model) {
+        var str = model._url;
+        if (!str) return false;
+        var uuid = false;
         //#region 请勿观摩
-        if (str.indexOf('/SB/排水系统/泵体1') != -1) {
-          uuid = '排水系统-泵体1';
+        if (str.indexOf("/SB/排水系统/泵体1") != -1) {
+          uuid = "排水系统-泵体1";
         }
-        if (str.indexOf('/SB/排水系统/泵体2') != -1) {
-          uuid = '排水系统-泵体2';
+        if (str.indexOf("/SB/排水系统/泵体2") != -1) {
+          uuid = "排水系统-泵体2";
         }
-        if (str.indexOf('/SB/排水系统/泵体3') != -1) {
-          uuid = '排水系统-泵体3';
+        if (str.indexOf("/SB/排水系统/泵体3") != -1) {
+          uuid = "排水系统-泵体3";
         }
-        if (str.indexOf('/SB/排水系统/泵体4') != -1) {
-          uuid = '排水系统-泵体4';
+        if (str.indexOf("/SB/排水系统/泵体4") != -1) {
+          uuid = "排水系统-泵体4";
         }
-        if (str.indexOf('/SB/排水系统/泵体5') != -1) {
-          uuid = '排水系统-泵体5';
+        if (str.indexOf("/SB/排水系统/泵体5") != -1) {
+          uuid = "排水系统-泵体5";
         }
-        if (str.indexOf('/SB/排水系统/泵体6') != -1) {
-          uuid = '排水系统-泵体6';
+        if (str.indexOf("/SB/排水系统/泵体6") != -1) {
+          uuid = "排水系统-泵体6";
         }
-        if (str.indexOf('/SB/排水系统/泵体7') != -1) {
-          uuid = '排水系统-泵体7';
+        if (str.indexOf("/SB/排水系统/泵体7") != -1) {
+          uuid = "排水系统-泵体7";
         }
-        if (str.indexOf('SB/排水系统/水泵盖顶/右/4/') != -1) {
-          uuid = '排水系统-盖顶1';
+        if (str.indexOf("SB/排水系统/水泵盖顶/右/4/") != -1) {
+          uuid = "排水系统-盖顶1";
         }
-        if (str.indexOf('SB/排水系统/水泵盖顶/右/3/') != -1) {
-          uuid = '排水系统-盖顶2';
+        if (str.indexOf("SB/排水系统/水泵盖顶/右/3/") != -1) {
+          uuid = "排水系统-盖顶2";
         }
-        if (str.indexOf('SB/排水系统/水泵盖顶/右/2/') != -1) {
-          uuid = '排水系统-盖顶3';
+        if (str.indexOf("SB/排水系统/水泵盖顶/右/2/") != -1) {
+          uuid = "排水系统-盖顶3";
         }
-        if (str.indexOf('SB/排水系统/水泵盖顶/右/1/') != -1) {
-          uuid = '排水系统-盖顶4';
+        if (str.indexOf("SB/排水系统/水泵盖顶/右/1/") != -1) {
+          uuid = "排水系统-盖顶4";
         }
-        if (str.indexOf('SB/排水系统/水泵盖顶/左/5/') != -1) {
-          uuid = '排水系统-盖顶5';
+        if (str.indexOf("SB/排水系统/水泵盖顶/左/5/") != -1) {
+          uuid = "排水系统-盖顶5";
         }
-        if (str.indexOf('SB/排水系统/水泵盖顶/左/6/') != -1) {
-          uuid = '排水系统-盖顶6';
+        if (str.indexOf("SB/排水系统/水泵盖顶/左/6/") != -1) {
+          uuid = "排水系统-盖顶6";
         }
-        if (str.indexOf('SB/排水系统/水泵盖顶/左/7/') != -1) {
-          uuid = '排水系统-盖顶7';
+        if (str.indexOf("SB/排水系统/水泵盖顶/左/7/") != -1) {
+          uuid = "排水系统-盖顶7";
         }
 
-        model.uuid = uuid
-        if(uuid)
-        return model
-        else
-        return false
+        model.uuid = uuid;
+        if (uuid) return model;
+        else return false;
         //#endregion
       }
 
@@ -1628,7 +1596,7 @@
 
           var str = decodeURI(tileset._url);
 
-          if (str.indexOf('水泵建筑体') != -1) {
+          if (str.indexOf("水泵建筑体") != -1) {
             PumpBodyBuilding(1, tileset);
           }
         }
@@ -1638,9 +1606,9 @@
         var model = viewer.scene.pick(movement.position); //选取当前的entity;
         if (model && Cesium.defined(model.tileset)) {
           var tileset = model.tileset;
-          models.forEach((e) => {
+          models.forEach(e => {
             if (tileset == e) {
-              if (tileset._url.indexOf('水泵盖顶') == -1) {
+              if (tileset._url.indexOf("水泵盖顶") == -1) {
                 tileset.show = false;
               }
             }
@@ -1649,7 +1617,7 @@
       }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
       var handlers = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
       handlers.setInputAction(function (movement) {
-        models.forEach((element) => {
+        models.forEach(element => {
           element.show = true;
         });
       }, Cesium.ScreenSpaceEventType.RIGHT_CLICK);
@@ -1660,16 +1628,16 @@
         if (model && Cesium.defined(model.tileset)) {
           var tileset = model.tileset;
           var str = decodeURI(tileset._url);
-                        
-          if (str.indexOf('SB/排水系统/水泵盖顶') != -1) {
-            PumpBodyBuilding(TestURI(tileset).uuid, tileset)
+
+          if (str.indexOf("SB/排水系统/水泵盖顶") != -1) {
+            PumpBodyBuilding(TestURI(tileset).uuid, tileset);
           }
         }
       }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
       function PumpBodyBuilding(type, tileset) {
-        models = []
+        models = [];
         function set_height(_tileset, height) {
-          viewer._cesiumWidget._creditContainer.style.display = 'none';
+          viewer._cesiumWidget._creditContainer.style.display = "none";
           viewer.scene.globe.depthTestAgainstTerrain = false;
           var boundingSphere = _tileset.boundingSphere;
           var cartographic = Cesium.Cartographic.fromCartesian(boundingSphere.center);
@@ -1680,141 +1648,129 @@
           _tileset.modelMatrix = Cesium.Matrix4.fromTranslation(translation);
         }
         for (var i = 0; i < viewer.scene.primitives.length; i++) {
-            
           var model = viewer.scene.primitives.get(i);
-          var data = TestURI(model)
-          if(data)
-            models.push(data);
+          var data = TestURI(model);
+          if (data) models.push(data);
         }
 
         var modelsHeight = [];
-          if(!tileset.display)
-            modelsHeight[0] = 10.4 
-            else
-            modelsHeight[0] = 25
+        if (!tileset.display) modelsHeight[0] = 10.4;
+        else modelsHeight[0] = 25;
 
-        if(viewer.PumpStructure_Architecture_Interval){return}
+        if (viewer.PumpStructure_Architecture_Interval) {
+          return;
+        }
         viewer.PumpStructure_Architecture_Interval = setInterval(function () {
-         
-          if(tileset.display){//升高
+          if (tileset.display) {
+            //升高
             modelsHeight[0] = modelsHeight[0] - 0.2;
 
             if (modelsHeight[0] <= 10.4) {
               clearInterval(viewer.PumpStructure_Architecture_Interval);
-              viewer.PumpStructure_Architecture_Interval = false
+              viewer.PumpStructure_Architecture_Interval = false;
               tileset.display = false;
             }
-          
-          }else{//降低
+          } else {
+            //降低
             modelsHeight[0] = modelsHeight[0] + 0.2;
-            
+
             if (modelsHeight[0] >= 25) {
               clearInterval(viewer.PumpStructure_Architecture_Interval);
-              viewer.PumpStructure_Architecture_Interval = false
+              viewer.PumpStructure_Architecture_Interval = false;
               tileset.display = true;
             }
           }
           set_height(tileset, modelsHeight[0]);
         }, 20);
 
-
         // set_height(tileset, 10);
         // console.log(type)
-        if(type==1){
-
-       
-
+        if (type == 1) {
           // return
-          if(!tileset.display)
-          modelsHeight[1] = 9 
-          else
-          modelsHeight[1] = 20
-          
-          if(viewer.PumpStructure_Architecture_Interval_1){return}
+          if (!tileset.display) modelsHeight[1] = 9;
+          else modelsHeight[1] = 20;
+
+          if (viewer.PumpStructure_Architecture_Interval_1) {
+            return;
+          }
           viewer.PumpStructure_Architecture_Interval_1 = setInterval(function () {
-           
-            if(tileset.display){//升高
+            if (tileset.display) {
+              //升高
               modelsHeight[1] = modelsHeight[1] - 0.2;
 
               if (modelsHeight[1] <= 10) {
                 clearInterval(viewer.PumpStructure_Architecture_Interval_1);
-                viewer.PumpStructure_Architecture_Interval_1 = false
+                viewer.PumpStructure_Architecture_Interval_1 = false;
               }
-            
-            }else{//降低
+            } else {
+              //降低
               modelsHeight[1] = modelsHeight[1] + 0.2;
-              
-              if (modelsHeight[1]  >= 20) {
+
+              if (modelsHeight[1] >= 20) {
                 clearInterval(viewer.PumpStructure_Architecture_Interval_1);
-                viewer.PumpStructure_Architecture_Interval_1 = false
+                viewer.PumpStructure_Architecture_Interval_1 = false;
               }
             }
             models.forEach(element => {
-              var state = false
+              var state = false;
               switch (element.uuid) {
-                case '排水系统-泵体1': case '排水系统-泵体2': case '排水系统-泵体3': case '排水系统-泵体4':
-                  state = true
+                case "排水系统-泵体1":
+                case "排水系统-泵体2":
+                case "排水系统-泵体3":
+                case "排水系统-泵体4":
+                  state = true;
                   break;
               }
-              if(state)
-                set_height(element, modelsHeight[1]);
+              if (state) set_height(element, modelsHeight[1]);
             });
-
           }, 20);
 
-          return
+          return;
         }
-       
-        if (typeof type == 'string') {
 
-          if(!tileset.display)
-          modelsHeight[2] = 9 
-          else
-          modelsHeight[2] = 20
+        if (typeof type == "string") {
+          if (!tileset.display) modelsHeight[2] = 9;
+          else modelsHeight[2] = 20;
 
-          if(viewer.PumpStructure_Architecture_Interval_x){return}
+          if (viewer.PumpStructure_Architecture_Interval_x) {
+            return;
+          }
           viewer.PumpStructure_Architecture_Interval_x = setInterval(function () {
-           
-            if(tileset.display){//升高
+            if (tileset.display) {
+              //升高
               modelsHeight[2] = modelsHeight[2] - 0.2;
 
               if (modelsHeight[2] <= 10) {
                 clearInterval(viewer.PumpStructure_Architecture_Interval_x);
-                viewer.PumpStructure_Architecture_Interval_x = false
+                viewer.PumpStructure_Architecture_Interval_x = false;
               }
-            
-            }else{//降低
+            } else {
+              //降低
               modelsHeight[2] = modelsHeight[2] + 0.2;
-              
-              if (modelsHeight[2]  >= 20) {
+
+              if (modelsHeight[2] >= 20) {
                 clearInterval(viewer.PumpStructure_Architecture_Interval_x);
-                viewer.PumpStructure_Architecture_Interval_x = false
+                viewer.PumpStructure_Architecture_Interval_x = false;
               }
             }
-          
 
-           
             models.forEach(element => {
-              var state = false
-              if(type == '排水系统-盖顶1' && element.uuid == '排水系统-泵体1'){
-                state = true
+              var state = false;
+              if (type == "排水系统-盖顶1" && element.uuid == "排水系统-泵体1") {
+                state = true;
               }
-              if(type == '排水系统-盖顶2' && element.uuid == '排水系统-泵体2'){
-                state = true
+              if (type == "排水系统-盖顶2" && element.uuid == "排水系统-泵体2") {
+                state = true;
               }
-              if(type == '排水系统-盖顶3' && element.uuid == '排水系统-泵体3'){
-                state = true
+              if (type == "排水系统-盖顶3" && element.uuid == "排水系统-泵体3") {
+                state = true;
               }
-              if(type == '排水系统-盖顶4' && element.uuid == '排水系统-泵体4'){
-                state = true
+              if (type == "排水系统-盖顶4" && element.uuid == "排水系统-泵体4") {
+                state = true;
               }
-              if(state)
-                set_height(element, modelsHeight[2]);
+              if (state) set_height(element, modelsHeight[2]);
             });
-
           }, 20);
-
-
         }
       }
     }
@@ -1823,35 +1779,35 @@
      * 添加杭州高程
      */
     example_altitude() {
-      const viewer = this.viewer
+      const viewer = this.viewer;
       //加载杭州高程地形
       var provider = new Cesium.CesiumTerrainProvider({
-        url: 'http://121.40.42.254:8008/%E6%9D%AD%E5%B7%9E-%E9%AB%98%E7%A8%8B/data/',
+        url: "http://121.40.42.254:8008/%E6%9D%AD%E5%B7%9E-%E9%AB%98%E7%A8%8B/data/",
         requestWaterMask: true, //开启法向量
         requestVertexNormals: true, //开启水面特效
       });
       viewer.terrainProvider = provider;
 
       G.Go(viewer, {
-        h: 4.87
-        ,p: -0.3651498703
-        ,r: 6.28
-        ,x: 120.142494
-        ,y: 30.272777
-        ,z: 1144.48
-        ,duration: 3
+        h: 4.87,
+        p: -0.3651498703,
+        r: 6.28,
+        x: 120.142494,
+        y: 30.272777,
+        z: 1144.48,
+        duration: 3,
       });
 
       G.aTiles(viewer, {
         type: "建筑",
-        url: 'http://121.40.42.254:8008/%E6%9D%AD%E5%B7%9E-%E7%9F%A2%E9%87%8F%E6%A8%A1%E5%9E%8B/tileset.json', //http://127.0.0.1:64158
+        url: "http://121.40.42.254:8008/%E6%9D%AD%E5%B7%9E-%E7%9F%A2%E9%87%8F%E6%A8%A1%E5%9E%8B/tileset.json", //http://127.0.0.1:64158
         flyTo: false,
         heightOffset: 0,
         height: 0,
         style: {
           color: "color('white', 0.6)",
           show: true,
-        }
+        },
       });
       var viewModel = {
         gradient: false,
@@ -1862,161 +1818,156 @@
         bandTransparency: 0.5,
         backgroundTransparency: 1,
       };
-      
+
       function updateMaterial() {
-          var gradient = Boolean(viewModel.gradient);
-          var band1Position = Number(viewModel.band1Position);
-          var band2Position = Number(viewModel.band2Position);
-          var band3Position = Number(viewModel.band3Position);
-          var bandThickness = Number(viewModel.bandThickness);
-          var bandTransparency = Number(viewModel.bandTransparency);
-          var backgroundTransparency = Number(viewModel.backgroundTransparency);
-          
-          var layers = [];
-          var backgroundLayer = {
-              entries: [
+        var gradient = Boolean(viewModel.gradient);
+        var band1Position = Number(viewModel.band1Position);
+        var band2Position = Number(viewModel.band2Position);
+        var band3Position = Number(viewModel.band3Position);
+        var bandThickness = Number(viewModel.bandThickness);
+        var bandTransparency = Number(viewModel.bandTransparency);
+        var backgroundTransparency = Number(viewModel.backgroundTransparency);
+
+        var layers = [];
+        var backgroundLayer = {
+          entries: [
+            {
+              height: 10.0,
+              color: new Cesium.Color(0.0, 0.0, 0.2, backgroundTransparency),
+            },
+            {
+              height: 300.0,
+              color: new Cesium.Color(1.0, 1.0, 1.0, backgroundTransparency),
+            },
+            {
+              height: 2000.0,
+              color: new Cesium.Color(1.0, 0.0, 0.0, backgroundTransparency),
+            },
+          ],
+          extendDownwards: true,
+          extendUpwards: true,
+        };
+        layers.push(backgroundLayer);
+
+        var gridStartHeight = 50.0;
+        var gridEndHeight = 2000.0;
+        var gridCount = 50;
+        for (var i = 0; i < gridCount; i++) {
+          var lerper = i / (gridCount - 1);
+          var heightBelow = Cesium.Math.lerp(gridStartHeight, gridEndHeight, lerper);
+          var heightAbove = heightBelow + 10.0;
+          var alpha = Cesium.Math.lerp(0.2, 0.4, lerper) * backgroundTransparency;
+          layers.push({
+            entries: [
               {
-                  height: 10.0,
-                  color: new Cesium.Color(0.0, 0.0, 0.2, backgroundTransparency),
+                height: heightBelow,
+                color: new Cesium.Color(1.0, 1.0, 1.0, alpha),
               },
               {
-                  height: 300.0,
-                  color: new Cesium.Color(1.0, 1.0, 1.0, backgroundTransparency),
+                height: heightAbove,
+                color: new Cesium.Color(1.0, 1.0, 1.0, alpha),
               },
-              {
-                  height: 2000.0,
-                  color: new Cesium.Color(1.0, 0.0, 0.0, backgroundTransparency),
-              },
-              ],
-              extendDownwards: true,
-              extendUpwards: true,
-          };
-          layers.push(backgroundLayer);
-          
-          var gridStartHeight = 50.0;
-          var gridEndHeight = 2000.0;
-          var gridCount = 50;
-          for (var i = 0; i < gridCount; i++) {
-              var lerper = i / (gridCount - 1);
-              var heightBelow = Cesium.Math.lerp(
-              gridStartHeight,
-              gridEndHeight,
-              lerper
-              );
-              var heightAbove = heightBelow + 10.0;
-              var alpha =
-              Cesium.Math.lerp(0.2, 0.4, lerper) * backgroundTransparency;
-              layers.push({
-              entries: [
-                  {
-                  height: heightBelow,
-                  color: new Cesium.Color(1.0, 1.0, 1.0, alpha),
-                  },
-                  {
-                  height: heightAbove,
-                  color: new Cesium.Color(1.0, 1.0, 1.0, alpha),
-                  },
-              ],
-              });
-          }
-          
-          var antialias = Math.min(10.0, bandThickness * 0.1);
-          
-          if (!gradient) {
-              var band1 = {
-              entries: [
-                  {
-                  height: band1Position - bandThickness * 0.5 - antialias,
-                  color: new Cesium.Color(0.0, 0.0, 1.0, 0.0),
-                  },
-                  {
-                  height: band1Position - bandThickness * 0.5,
-                  color: new Cesium.Color(0.0, 0.0, 1.0, bandTransparency),
-                  },
-                  {
-                  height: band1Position + bandThickness * 0.5,
-                  color: new Cesium.Color(0.0, 0.0, 1.0, bandTransparency),
-                  },
-                  {
-                  height: band1Position + bandThickness * 0.5 + antialias,
-                  color: new Cesium.Color(0.0, 0.0, 1.0, 0.0),
-                  },
-              ],
-              };
-          
-              var band2 = {
-              entries: [
-                  {
-                  height: band2Position - bandThickness * 0.5 - antialias,
-                  color: new Cesium.Color(0.0, 1.0, 0.0, 0.0),
-                  },
-                  {
-                  height: band2Position - bandThickness * 0.5,
-                  color: new Cesium.Color(0.0, 1.0, 0.0, bandTransparency),
-                  },
-                  {
-                  height: band2Position + bandThickness * 0.5,
-                  color: new Cesium.Color(0.0, 1.0, 0.0, bandTransparency),
-                  },
-                  {
-                  height: band2Position + bandThickness * 0.5 + antialias,
-                  color: new Cesium.Color(0.0, 1.0, 0.0, 0.0),
-                  },
-              ],
-              };
-          
-              var band3 = {
-              entries: [
-                  {
-                  height: band3Position - bandThickness * 0.5 - antialias,
-                  color: new Cesium.Color(1.0, 0.0, 0.0, 0.0),
-                  },
-                  {
-                  height: band3Position - bandThickness * 0.5,
-                  color: new Cesium.Color(1.0, 0.0, 0.0, bandTransparency),
-                  },
-                  {
-                  height: band3Position + bandThickness * 0.5,
-                  color: new Cesium.Color(1.0, 0.0, 0.0, bandTransparency),
-                  },
-                  {
-                  height: band3Position + bandThickness * 0.5 + antialias,
-                  color: new Cesium.Color(1.0, 0.0, 0.0, 0.0),
-                  },
-              ],
-              };
-          
-              layers.push(band1);
-              layers.push(band2);
-              layers.push(band3);
-          } else {
-              var combinedBand = {
-              entries: [
-                  {
-                  height: band1Position - bandThickness * 0.5,
-                  color: new Cesium.Color(0.0, 0.0, 1.0, bandTransparency),
-                  },
-                  {
-                  height: band2Position,
-                  color: new Cesium.Color(0.0, 1.0, 0.0, bandTransparency),
-                  },
-                  {
-                  height: band3Position + bandThickness * 0.5,
-                  color: new Cesium.Color(1.0, 0.0, 0.0, bandTransparency),
-                  },
-              ],
-              };
-          
-              layers.push(combinedBand);
-          }
-          
-          var material = Cesium.createElevationBandMaterial({
-              scene: viewer.scene,
-              layers: layers,
+            ],
           });
-          viewer.scene.globe.material = material;
+        }
+
+        var antialias = Math.min(10.0, bandThickness * 0.1);
+
+        if (!gradient) {
+          var band1 = {
+            entries: [
+              {
+                height: band1Position - bandThickness * 0.5 - antialias,
+                color: new Cesium.Color(0.0, 0.0, 1.0, 0.0),
+              },
+              {
+                height: band1Position - bandThickness * 0.5,
+                color: new Cesium.Color(0.0, 0.0, 1.0, bandTransparency),
+              },
+              {
+                height: band1Position + bandThickness * 0.5,
+                color: new Cesium.Color(0.0, 0.0, 1.0, bandTransparency),
+              },
+              {
+                height: band1Position + bandThickness * 0.5 + antialias,
+                color: new Cesium.Color(0.0, 0.0, 1.0, 0.0),
+              },
+            ],
+          };
+
+          var band2 = {
+            entries: [
+              {
+                height: band2Position - bandThickness * 0.5 - antialias,
+                color: new Cesium.Color(0.0, 1.0, 0.0, 0.0),
+              },
+              {
+                height: band2Position - bandThickness * 0.5,
+                color: new Cesium.Color(0.0, 1.0, 0.0, bandTransparency),
+              },
+              {
+                height: band2Position + bandThickness * 0.5,
+                color: new Cesium.Color(0.0, 1.0, 0.0, bandTransparency),
+              },
+              {
+                height: band2Position + bandThickness * 0.5 + antialias,
+                color: new Cesium.Color(0.0, 1.0, 0.0, 0.0),
+              },
+            ],
+          };
+
+          var band3 = {
+            entries: [
+              {
+                height: band3Position - bandThickness * 0.5 - antialias,
+                color: new Cesium.Color(1.0, 0.0, 0.0, 0.0),
+              },
+              {
+                height: band3Position - bandThickness * 0.5,
+                color: new Cesium.Color(1.0, 0.0, 0.0, bandTransparency),
+              },
+              {
+                height: band3Position + bandThickness * 0.5,
+                color: new Cesium.Color(1.0, 0.0, 0.0, bandTransparency),
+              },
+              {
+                height: band3Position + bandThickness * 0.5 + antialias,
+                color: new Cesium.Color(1.0, 0.0, 0.0, 0.0),
+              },
+            ],
+          };
+
+          layers.push(band1);
+          layers.push(band2);
+          layers.push(band3);
+        } else {
+          var combinedBand = {
+            entries: [
+              {
+                height: band1Position - bandThickness * 0.5,
+                color: new Cesium.Color(0.0, 0.0, 1.0, bandTransparency),
+              },
+              {
+                height: band2Position,
+                color: new Cesium.Color(0.0, 1.0, 0.0, bandTransparency),
+              },
+              {
+                height: band3Position + bandThickness * 0.5,
+                color: new Cesium.Color(1.0, 0.0, 0.0, bandTransparency),
+              },
+            ],
+          };
+
+          layers.push(combinedBand);
+        }
+
+        var material = Cesium.createElevationBandMaterial({
+          scene: viewer.scene,
+          layers: layers,
+        });
+        viewer.scene.globe.material = material;
       }
-      
+
       updateMaterial();
 
       // setTimeout(() => {
@@ -2038,24 +1989,21 @@
       //         }
       //     }, 100);
       // }, 4000 * 3);
-
     }
 
     /**
      * 画点
      */
     example_drawPoint() {
-    
       //刷新指引
       this.setTitle({
         text: "单击鼠标，右键结束画点",
         title: "提示",
-      })
-        
+      });
+
       G.drawPoint(this.viewer, function (id) {
         console.log(id);
       });
-
     }
 
     /**
@@ -2066,14 +2014,14 @@
         id: G.uuid(),
         _style: {
           labelTransparency: 100, //字体透明度
-          outlineColor: '#3462d0', //字体边框颜色
-          fillColor: '#fff', //字体颜色
-          PolylineColor: '#fff',
+          outlineColor: "#3462d0", //字体边框颜色
+          fillColor: "#fff", //字体颜色
+          PolylineColor: "#fff",
           PolylineWitch: 3, //线条宽度
-          shapeColor: '#fff',
+          shapeColor: "#fff",
           shapeTransparency: 50, //形状透明度
           borderWitch: 2, //边框宽度
-          borderColor: '#3462d0',
+          borderColor: "#3462d0",
           borderTransparency: 80, //边框透明度
         },
       });
@@ -2087,7 +2035,7 @@
       this.initDynamicDraw();
       function _(positions) {
         var p = [];
-        positions.forEach((element) => {
+        positions.forEach(element => {
           var cartographic = Cesium.Cartographic.fromCartesian(element);
           var lng = Cesium.Math.toDegrees(cartographic.longitude);
           var lat = Cesium.Math.toDegrees(cartographic.latitude);
@@ -2102,25 +2050,25 @@
       this.setTitle({
         text: "单击起始点，移动鼠标至节点，再次单机，右键结束画点",
         title: type,
-      })
-        
+      });
+
       switch (type) {
-        case 'drawPolyline': //画折线
+        case "drawPolyline": //画折线
           this.DynamicDraw.drawPolyline(function (positions) {
             console.log(_(positions));
           });
           break;
-        case 'drawPolygon': //画多边形
+        case "drawPolygon": //画多边形
           this.DynamicDraw.drawPolygon(function (positions) {
             console.log(_(positions));
           });
           break;
-        case 'drawRectangle': //画矩形
+        case "drawRectangle": //画矩形
           this.DynamicDraw.drawRectangle(function (positions) {
             console.log(_(positions));
           });
           break;
-        case 'drawCircle': //画圆
+        case "drawCircle": //画圆
           this.DynamicDraw.drawCircle(function (positions) {
             console.log(_(positions));
           });
@@ -2137,18 +2085,18 @@
     initMeasureDraw() {
       this.DynamicDraw = new G.D.DynamicDrawer(this.viewer, {
         id: G.uuid(),
-        type: '测量', //默认为空就是绘制
+        type: "测量", //默认为空就是绘制
         _style: {
-          backgroundColor: '#000',
+          backgroundColor: "#000",
           labelTransparency: 80, //字体透明度
-          outlineColor: '#fff', //字体边框颜色3462d0
-          fillColor: '#fff', //字体颜色
-          PolylineColor: '#fff',
+          outlineColor: "#fff", //字体边框颜色3462d0
+          fillColor: "#fff", //字体颜色
+          PolylineColor: "#fff",
           PolylineWitch: 3, //线条宽度
-          shapeColor: '#fff',
+          shapeColor: "#fff",
           shapeTransparency: 50, //形状透明度
           borderWitch: 2, //边框宽度
-          borderColor: '#3462d0',
+          borderColor: "#3462d0",
           borderTransparency: 80, //边框透明度
         },
       });
@@ -2161,12 +2109,12 @@
     example_measureDraw(type) {
       this.initMeasureDraw();
       switch (type) {
-        case 'measurePolyline': //测折线
+        case "measurePolyline": //测折线
           this.DynamicDraw.drawPolyline(function (positions) {
             console.log(positions);
           });
           break;
-        case 'measurePolygon': //测多边形
+        case "measurePolygon": //测多边形
           this.DynamicDraw.drawPolygon(function (positions) {
             console.log(positions);
           });
@@ -2175,7 +2123,7 @@
           break;
       }
     }
-    
+
     //测高
     example_measureLineFlat() {
       G.M.measureHeight(this.viewer);
@@ -2185,25 +2133,22 @@
       G.M.deleteAltimetry(this.viewer);
     }
     //释放编辑
-    example_measure_release(){
-      this.example_deleteAltimetry()
+    example_measure_release() {
+      this.example_deleteAltimetry();
     }
-
 
     //编辑图形
     example_editEntity() {
-      if(this.DynamicDraw)
-      this.DynamicDraw.setMode(1);
+      if (this.DynamicDraw) this.DynamicDraw.setMode(1);
     }
     //删除图形
     example_deleteEntity() {
-      if(this.DynamicDraw)
-      this.DynamicDraw.setMode(2);
+      if (this.DynamicDraw) this.DynamicDraw.setMode(2);
     }
-    
+
     //释放编辑
-    example_edit_release(){
-      G.entities.Release(this.viewer)
+    example_edit_release() {
+      G.entities.Release(this.viewer);
     }
 
     /**
@@ -2211,59 +2156,71 @@
      */
     example_addNavigation() {
       G.C.NavigationBox(this.viewer, {
-          x: 0,
-          y: 0,
-          z: 10000,
-          heading: 0,
-          pitch: 0,
-          roll: 0
+        x: 0,
+        y: 0,
+        z: 10000,
+        heading: 0,
+        pitch: 0,
+        roll: 0,
       });
     }
     /**
      * 添加鼠标控件
      */
     example_addPositionBox() {
-      G.C.MousePositionBox(this.viewer,'mapBox');
+      G.C.MousePositionBox(this.viewer, "mapBox");
     }
 
     /**
      * 着色器下雪
      */
-    example_snowSystem_Shaders(){
-      this.Snow = this.Snow == null ?  new G.E.Effect(this.viewer, {
-          visibility: 0.2,
-          show:false,
-          type:'x',
-          color: new Cesium.Color.fromCssColorString("#e7e7e7")//new Cesium.Color(0.8, 0.8, 0.8, 0.3)
-      }) : this.Snow;//雪
-      if(!this.Snow._show)  this.Snow.show(true); else  this.Snow.show(false);
+    example_snowSystem_Shaders() {
+      this.Snow =
+        this.Snow == null
+          ? new G.E.Effect(this.viewer, {
+              visibility: 0.2,
+              show: false,
+              type: "x",
+              color: new Cesium.Color.fromCssColorString("#e7e7e7"), //new Cesium.Color(0.8, 0.8, 0.8, 0.3)
+            })
+          : this.Snow; //雪
+      if (!this.Snow._show) this.Snow.show(true);
+      else this.Snow.show(false);
       return this.Snow;
     }
     /**
      * 着色器下雨
      */
-    example_RainwaterSystem_Shaders(){
-        this.Rain = this.Rain == null ?  new G.E.Effect(this.viewer, {
-            visibility: 0.2,
-            show:false,
-            type:'y',
-            color: new Cesium.Color.fromCssColorString("#e7e7e7")//new Cesium.Color(0.8, 0.8, 0.8, 0.3)
-        }) : this.Rain;//雨
-        if(!this.Rain._show)  this.Rain.show(true); else  this.Rain.show(false);
-        return this.Rain;
+    example_RainwaterSystem_Shaders() {
+      this.Rain =
+        this.Rain == null
+          ? new G.E.Effect(this.viewer, {
+              visibility: 0.2,
+              show: false,
+              type: "y",
+              color: new Cesium.Color.fromCssColorString("#e7e7e7"), //new Cesium.Color(0.8, 0.8, 0.8, 0.3)
+            })
+          : this.Rain; //雨
+      if (!this.Rain._show) this.Rain.show(true);
+      else this.Rain.show(false);
+      return this.Rain;
     }
     /**
      * 着色器雾
      */
-    example_Fogging(){
-        this.Fog = this.Fog == null ?  new G.E.Effect(this.viewer, {
-            visibility: 0.2,
-            show:false,
-            type:'w',
-            color: new Cesium.Color.fromCssColorString("#e7e7e7")//new Cesium.Color(0.8, 0.8, 0.8, 0.3)
-        }) : this.Fog;//雾
-        if(!this.Fog._show)  this.Fog.show(true); else  this.Fog.show(false);
-        return this.Fog;
+    example_Fogging() {
+      this.Fog =
+        this.Fog == null
+          ? new G.E.Effect(this.viewer, {
+              visibility: 0.2,
+              show: false,
+              type: "w",
+              color: new Cesium.Color.fromCssColorString("#e7e7e7"), //new Cesium.Color(0.8, 0.8, 0.8, 0.3)
+            })
+          : this.Fog; //雾
+      if (!this.Fog._show) this.Fog.show(true);
+      else this.Fog.show(false);
+      return this.Fog;
     }
 
     /**
@@ -2275,15 +2232,15 @@
 
       var FineBezierTimer = 0.01; //算法路径速度
 
-      var multiplier = 0.7 ; //当前世界速度 (可整体提高行走速度 必要也可以暂停模型)
+      var multiplier = 0.7; //当前世界速度 (可整体提高行走速度 必要也可以暂停模型)
 
       var xyList = [
-        {x: 120.37063197564044, y: 29.99411991794387,   z: -0}
-        ,{x: 120.36958684743908, y: 29.995376752897222, z: -0}
-        ,{x: 120.36965864539354, y: 29.995894284404972, z: -0}
-        ,{x: 120.36998604974082, y: 29.996108457100856, z: -0}
-        ,{x: 120.37083091258253, y: 29.99547889856467, z:  -0}
-        ,{x: 120.37066343919086, y: 29.99413122161608, z:  -0}
+        { x: 120.37063197564044, y: 29.99411991794387, z: -0 },
+        { x: 120.36958684743908, y: 29.995376752897222, z: -0 },
+        { x: 120.36965864539354, y: 29.995894284404972, z: -0 },
+        { x: 120.36998604974082, y: 29.996108457100856, z: -0 },
+        { x: 120.37083091258253, y: 29.99547889856467, z: -0 },
+        { x: 120.37066343919086, y: 29.99413122161608, z: -0 },
       ];
 
       var xyFineBezier = [];
@@ -2312,7 +2269,7 @@
 
         line[0].time = FineBezierTimer;
         line[line.length - 1].time = timer;
-        line.forEach((element) => {
+        line.forEach(element => {
           xyFineBezier.push(element);
         });
       }
@@ -2321,13 +2278,13 @@
 
       var arr = [];
       var i = 0;
-      xyList.forEach((e) => {
+      xyList.forEach(e => {
         arr.push(e.x, e.y);
       });
       var alp = 1;
       var num = 0;
       viewer.entities.add({
-        type: 'IntelligentRoaming',
+        type: "IntelligentRoaming",
         polyline: {
           positions: xyFineBezier, //Cesium.Cartesian3.fromDegreesArray(arr),
           width: 26,
@@ -2359,7 +2316,7 @@
 
       function getTimeList(xyList) {
         var FlightRoamingData = []; //人物漫游时路线数据存储
-        var cameraTimer = '00:00:00';
+        var cameraTimer = "00:00:00";
         var mm = timer; //一截路的时长
         for (let index = 0; index < xyList.length; index++) {
           if (Cesium.defined(xyList[index].time)) {
@@ -2369,16 +2326,16 @@
           const element = xyList[index];
 
           FlightRoamingData.push({
-            id: 'roaming_' + index,
+            id: "roaming_" + index,
             x: element.x,
             y: element.y,
             z: element.z,
             time: ISODateString(new Date()),
             ss: 20, // 停留的时长
           });
-          var hour = cameraTimer.split(':')[0];
-          var min = cameraTimer.split(':')[1];
-          var sec = cameraTimer.split(':')[2];
+          var hour = cameraTimer.split(":")[0];
+          var min = cameraTimer.split(":")[1];
+          var sec = cameraTimer.split(":")[2];
           var s = Number(hour * 3600) + Number(min * 60) + Number(sec); //加当前相机时间
           function formatTime(s) {
             var t;
@@ -2387,17 +2344,17 @@
               var min = Math.floor(s / 60) % 60;
               var sec = s % 60;
               if (hour < 10) {
-                t = '0' + hour + ':';
+                t = "0" + hour + ":";
               } else {
-                t = hour + ':';
+                t = hour + ":";
               }
 
               if (min < 10) {
-                t += '0';
+                t += "0";
               }
-              t += min + ':';
+              t += min + ":";
               if (sec < 10) {
-                t += '0';
+                t += "0";
               }
               t += sec.toFixed(2);
             }
@@ -2406,9 +2363,9 @@
           cameraTimer = formatTime(s + mm);
           function ISODateString(d) {
             function pad(n) {
-              return n < 10 ? '0' + n : n;
+              return n < 10 ? "0" + n : n;
             }
-            return d.getUTCFullYear() + '-' + pad(d.getUTCMonth() + 1) + '-' + pad(d.getUTCDate()) + 'T' + cameraTimer + 'Z';
+            return d.getUTCFullYear() + "-" + pad(d.getUTCMonth() + 1) + "-" + pad(d.getUTCDate()) + "T" + cameraTimer + "Z";
           }
         }
         return FlightRoamingData;
@@ -2417,29 +2374,29 @@
       xyList = Cesium.Cartesian3.fromDegreesArray(arr);
       var FlightRoamingData = getTimeList(xyFineBezier); //xyFineBezier
 
-      var gltf_uri = 'http://121.40.42.254:8008/%E4%BA%BA%E7%89%A9%E7%8E%AF%E6%A8%A1%E5%9E%8B/%E4%BA%BA%E7%89%A9/%E7%99%BD%E8%86%9C%E8%A1%8C%E8%B5%B0/scene.gltf';
-    
+      var gltf_uri = "http://121.40.42.254:8008/%E4%BA%BA%E7%89%A9%E7%8E%AF%E6%A8%A1%E5%9E%8B/%E4%BA%BA%E7%89%A9/%E7%99%BD%E8%86%9C%E8%A1%8C%E8%B5%B0/scene.gltf";
+
       var czml = [
         {
-          id: 'document',
-          version: '1.0',
+          id: "document",
+          version: "1.0",
           clock: {
-            interval: '2018-07-19T15:18:00Z/2018-07-19T15:18:30Z',
-            currentTime: '2018-07-19T15:18:00Z',
+            interval: "2018-07-19T15:18:00Z/2018-07-19T15:18:30Z",
+            currentTime: "2018-07-19T15:18:00Z",
             multiplier: 1,
-            range: 'LOOP_STOP',
-            step: 'SYSTEM_CLOCK_MULTIPLIER',
+            range: "LOOP_STOP",
+            step: "SYSTEM_CLOCK_MULTIPLIER",
           },
         },
         {
-          id: 'Will I still be able to use data roaming after I have NO!',
+          id: "Will I still be able to use data roaming after I have NO!",
           model: {
             gltf: gltf_uri,
             scale: 0.1,
           },
           position: {
-            interpolationAlgorithm: 'LINEAR',
-            forwardExtrapolationType: 'HOLD',
+            interpolationAlgorithm: "LINEAR",
+            forwardExtrapolationType: "HOLD",
             cartesian: [],
           },
           orientation: {
@@ -2453,10 +2410,10 @@
       //添加地形分析及模型行为
       // console.log(Cesium.Transforms.headingPitchRollQuaternion(position, hpr))
       var tileset;
-      
+
       for (var i = 0; i < viewer.scene.primitives.length; i++) {
         var model = viewer.scene.primitives.get(i);
-        if (model.object&&model.object.type == "山体") {
+        if (model.object && model.object.type == "山体") {
           tileset = model;
         }
       }
@@ -2487,7 +2444,7 @@
       entity.orientation = new Cesium.VelocityOrientationProperty(property);
       entity.model.silhouetteColor = Cesium.Color.GREEN; //new Cesium.Color( 1.0 ,  0 ,  0 ,  1.0 );
       entity.model.silhouetteSize = 3.0;
-      entity.type = 'IntelligentRoaming';
+      entity.type = "IntelligentRoaming";
       viewer.clock.multiplier = multiplier;
       function czmlRoaming(position, czml) {
         var p = [];
@@ -2505,40 +2462,40 @@
           item.x = mapPosition.x;
           item.y = mapPosition.y;
           item.z = mapPosition.z;
-  
+
           var lng = Number(item.x.toFixed(6));
           var lat = Number(item.y.toFixed(6));
           var hei = item.z;
           var time = item.time;
-  
+
           var _position = null;
           if (lng && lat) _position = Cesium.Cartesian3.fromDegrees(lng, lat, hei);
-  
+
           var juliaDate = null;
           if (time) juliaDate = Cesium.JulianDate.fromIso8601(time);
-  
+
           if (_position && juliaDate) property.addSample(juliaDate, _position);
-  
+
           if (i == 0) _start = juliaDate;
           else if (i == len - 1) _stop = juliaDate;
         }
         // console.log(_start.clone().toString())
-  
+
         /* Use a function for the exact format desired... */
         function ISODateString(d) {
           function pad(n) {
-            return n < 10 ? '0' + n : n;
+            return n < 10 ? "0" + n : n;
           }
-          return d.getUTCFullYear() + '-' + pad(d.getUTCMonth() + 1) + '-' + pad(d.getUTCDate()) + 'T' + pad(d.getUTCHours()) + ':' + pad(d.getUTCMinutes()) + ':' + pad(d.getUTCSeconds()) + 'Z';
+          return d.getUTCFullYear() + "-" + pad(d.getUTCMonth() + 1) + "-" + pad(d.getUTCDate()) + "T" + pad(d.getUTCHours()) + ":" + pad(d.getUTCMinutes()) + ":" + pad(d.getUTCSeconds()) + "Z";
         }
-  
-        czml[0].clock.interval = ISODateString(new Date(_start.clone().toString())) + '/' + ISODateString(new Date(_stop.clone().toString()));
+
+        czml[0].clock.interval = ISODateString(new Date(_start.clone().toString())) + "/" + ISODateString(new Date(_stop.clone().toString()));
         czml[0].clock.startTime = ISODateString(new Date(_start.clone().toString()));
         czml[0].clock.stopTime = ISODateString(new Date(_stop.clone().toString()));
         czml[0].clock.currentTime = ISODateString(new Date(_start.clone().toString()));
         czml[0].clock.clockRange = Cesium.ClockRange.LOOP_STOP;
         czml[0].clock.multiplier = 1.0;
-  
+
         for (let index = 0; index < position.length; index++) {
           const element = position[index];
           var cartesian = Cesium.Cartesian3.fromDegrees(element.x, element.y, 10);
@@ -2550,10 +2507,474 @@
         return czml;
       }
     }
+
+
+    /**
+     * 飞行游戏
+     */
+    example_FlyingGame(tileset) {
+      var canvas = this.viewer.canvas;
+
+      $("#travelscope").append(`<tbody id="FlyingGame"  class="notes">
+        <tr>
+            <td>
+            单击3D窗口，然后使用键盘更改设置。
+            </td>
+        </tr>
+        <tr>
+            <td>航向: <span id="heading">129.0</span>°</td>
+        </tr>
+        <tr>
+            <td>← A/→ D</td>
+        </tr>
+        <tr>
+            <td>俯仰: <span id="pitch">-45.0</span>°</td>
+        </tr>
+        <tr>
+            <td>↑ W/↓ S</td>
+        </tr>
+        <tr>
+            <td>旋转: <span id="roll">0.0</span>°</td>
+        </tr>
+        <tr>
+            <td>← + ↑ 左/ → + ↑右</td>
+        </tr>
+        <tr>
+            <td>速度: <span id="speed">1.0</span>m/s</td>
+        </tr>
+        </tbody>`)
+
+
+        canvas.setAttribute("tabindex", "0"); // 第一视角
+        canvas.addEventListener("click", function () {
+            canvas.focus();
+        });
+        canvas.focus();
+
+        var scene = viewer.scene;
+
+        var pathPosition = new Cesium.SampledPositionProperty();
+        var entityPath = viewer.entities.add({
+            position: pathPosition,
+            name: "path",
+            path: {
+                show: true,
+                leadTime: 0,
+                trailTime: 60,
+                width: 10,
+                resolution: 1,
+                material: new Cesium.PolylineGlowMaterialProperty({
+                    glowPower: 0.3,
+                    taperPower: 0.3,
+                    color: Cesium.Color.PALEGOLDENROD,
+                }),
+            },
+        });
+
+        var camera = viewer.camera;
+        var controller = scene.screenSpaceCameraController;
+        var r = 0;
+        var center = new Cesium.Cartesian3();
+
+        var hpRange =  new Cesium.HeadingPitchRange(0, 0, 0);
+        var speed = 0;
+        var deltaRadians = Cesium.Math.toRadians(5.0);
+        var hpRoll =  new Cesium.HeadingPitchRoll(0, 0, 0);//new Cesium.HeadingPitchRoll();
+        var position = Cesium.Cartesian3.fromDegrees(
+            120.80491,
+            30.302535,
+            10.0
+        );
+        var fixedFrameTransform = Cesium.Transforms.localFrameToFixedFrameGenerator(
+            "north",
+            "west"
+        );
+        var speedVector = new Cesium.Cartesian3();
+        var then_state = false//判断模型加载状态
+   
+        function then (model) {
+          then_state = true
+            // Play and loop all animations at half-speed
+            model.activeAnimations.addAll({
+                multiplier: 0.5,
+                loop: Cesium.ModelAnimationLoop.REPEAT,
+            });
+
+            // Zoom to model
+            r = 2.0 * Math.max(model.boundingSphere.radius, camera.frustum.near);
+            controller.minimumZoomDistance = r * 0.5;
+            Cesium.Matrix4.multiplyByPoint(
+                model.modelMatrix,
+                model.boundingSphere.center,
+                center
+            );
+            var heading = Cesium.Math.toRadians(230.0);
+            var pitch = Cesium.Math.toRadians(-20.0);
+            hpRange.heading = heading;
+            hpRange.pitch = pitch;
+            hpRange.range = r * 50.0;
+
+            
+            clampToHeight()
+        };
+
+
+        function clampToHeight() {
+        //  var positionProperty = pathPosition;
+
+         var entity = planePrimitive
+          if (Cesium.defined(tileset)) {
+            if (scene.clampToHeightSupported) {
+              tileset.initialTilesLoaded.addEventListener(start);
+            } else {
+              window.alert("This browser does not support clampToHeight.");
+            }
+          } else {
+            console.error("tileset.initialTilesLoaded", "绑定失败 请核查模型是否加载完成，或是否被隐藏");
+            return false;
+          }
+          var cache_position;
+          function start() {
+            viewer.clock.shouldAnimate = true;
+            var objectsToExclude = [entity];
+      
+            var _eventListener = function () {
+              // var position = positionProperty.getValue(viewer.clock.currentTime);
+            
+
+              if(position)
+              {
+                // var point = {};
+                // var cartographic = Cesium.Cartographic.fromCartesian(scene.clampToHeight(position, objectsToExclude));
+                // point.x = Cesium.Math.toDegrees(cartographic.longitude);
+                // point.y = Cesium.Math.toDegrees(cartographic.latitude);
+                // point.z = cartographic.height; //还原点位高度
+                position = scene.clampToHeight(position, objectsToExclude) //Cesium.Cartesian3.fromDegrees(point.x, point.y, point.z)
+                if(position)
+                  cache_position = position
+                  else
+                  position = cache_position
+
+                // console.log(position)
+              }
+            
+              // entity.position = scene.clampToHeight(position, objectsToExclude);
+            };
+            scene.postRender.addEventListener(_eventListener);
+          }
+      
+        }
+        var planePrimitive = scene.primitives.add(
+          Cesium.Model.fromGltf({
+            url: (Debug?local:server) + "/%E4%BA%BA%E7%89%A9%E7%8E%AF%E6%A8%A1%E5%9E%8B/%E7%8E%AF%E5%A2%83/%E8%B5%B0%E8%B7%AF%E7%9A%84%E9%B8%AD%E5%AD%90/scene.gltf",
+            modelMatrix: Cesium.Transforms.headingPitchRollToFixedFrame(
+                position,
+                hpRoll,
+                Cesium.Ellipsoid.WGS84,
+                fixedFrameTransform
+            ),
+            minimumPixelSize: 128,
+          })
+        );
+        planePrimitive.readyPromise
+        .then(then)
+        .otherwise(function (error) {
+          console.log(error);
+        });
+
+        document.addEventListener("keydown", function (e) {
+            switch (e.keyCode) {
+                case 83://S
+                  speed = -10;
+                  // speed down
+                  // speed = Math.max(--speed, 1);
+                break;
+                case 87://W
+                  speed = 10;
+                  // speed up
+                  // speed = Math.min(++speed, 100);
+                break;
+                // case 65://a
+                //   hpRoll.pitch += deltaRadians;
+                //   if (hpRoll.pitch > Cesium.Math.TWO_PI) {
+                //   hpRoll.pitch -= Cesium.Math.TWO_PI;
+                //   }
+                // break;  
+                // case 68://d   
+                //   hpRoll.pitch -= deltaRadians;
+                //   if (hpRoll.pitch < -Cesium.Math.TWO_PI) {
+                //   hpRoll.pitch += Cesium.Math.TWO_PI;
+                //   }
+                // break;
+                case 68:
+                  hpRoll.heading += deltaRadians;
+                  if (hpRoll.heading > Cesium.Math.TWO_PI) {
+                  hpRoll.heading -= Cesium.Math.TWO_PI;
+                  }
+                break;
+                case 65:
+              
+                  hpRoll.heading -= deltaRadians;
+                  if (hpRoll.heading < 0.0) {
+                  hpRoll.heading += Cesium.Math.TWO_PI;
+                  }
+                break;     
+                case 32 :
+                  var point = {};
+                  var cartographic = Cesium.Cartographic.fromCartesian(position);
+                  point.x = Cesium.Math.toDegrees(cartographic.longitude);
+                  point.y = Cesium.Math.toDegrees(cartographic.latitude);
+                  point.z = cartographic.height; //还原点位高度
+                  console.log(point.z)
+                  position = Cesium.Cartesian3.fromDegrees(point.x, point.y, point.z + 5)
+         
+                break;
+                // //模型抬头
+                  // // turn right
+                  // hpRoll.roll += deltaRadians;
+                  // if (hpRoll.roll > Cesium.Math.TWO_PI) {
+                  // hpRoll.roll -= Cesium.Math.TWO_PI;
+                  // }
+
+                    // //模型低头
+                    // // turn left
+                    // // roll left until
+                    // hpRoll.roll -= deltaRadians;
+                    // if (hpRoll.roll < 0.0) {
+                    // hpRoll.roll += Cesium.Math.TWO_PI;
+                    // }
+                default:
+            }
+        });
+        document.addEventListener("keyup", function (e) {
+          switch (e.keyCode) {
+              case 83://S
+                speed = 0;
+              break;
+              case 87://W
+                speed = 0;
+              break;
         
+              case 68:
+                hpRoll.heading += deltaRadians;
+                if (hpRoll.heading > Cesium.Math.TWO_PI) {
+                hpRoll.heading -= Cesium.Math.TWO_PI;
+                }
+              break;
+              case 65:
+            
+                hpRoll.heading -= deltaRadians;
+                if (hpRoll.heading < 0.0) {
+                hpRoll.heading += Cesium.Math.TWO_PI;
+                }
+              break;
+            
+          }
+        });
+        var headingSpan = document.getElementById("heading");
+        var pitchSpan = document.getElementById("pitch");
+        var rollSpan = document.getElementById("roll");
+        var speedSpan = document.getElementById("speed");
+        var fromBehind = document.getElementById("fromBehind");
+
+       
+
+        viewer.scene.preUpdate.addEventListener(function (scene, time) {
+            
+            speedVector = Cesium.Cartesian3.multiplyByScalar(
+                Cesium.Cartesian3.UNIT_X,
+                speed / 10,
+                speedVector
+            );
+           
+          
+            position = Cesium.Matrix4.multiplyByPoint(
+                Cesium.Transforms.headingPitchRollToFixedFrame(
+                    position,
+                    new Cesium.HeadingPitchRoll(Cesium.Math.toRadians(-180) + Cesium.Math.toRadians(Cesium.Math.toDegrees(hpRoll.heading)), Cesium.Math.toRadians(Cesium.Math.toDegrees(hpRoll.pitch)), Cesium.Math.toRadians(Cesium.Math.toDegrees(hpRoll.roll))),
+                    Cesium.Ellipsoid.WGS84,
+                    fixedFrameTransform
+                ),
+                speedVector,
+                position
+            );
+            
+            pathPosition.addSample(Cesium.JulianDate.now(), position);
+
+            Cesium.Transforms.headingPitchRollToFixedFrame(
+                position,
+                new Cesium.HeadingPitchRoll(Cesium.Math.toRadians(Cesium.Math.toDegrees(hpRoll.heading)), Cesium.Math.toRadians(Cesium.Math.toDegrees(hpRoll.roll)), Cesium.Math.toRadians(Cesium.Math.toDegrees(hpRoll.pitch))),
+                Cesium.Ellipsoid.WGS84,
+                fixedFrameTransform,
+                planePrimitive.modelMatrix
+            );
+
+            if (false && then_state) {// 第一视角
+                // Zoom to model
+                Cesium.Matrix4.multiplyByPoint(
+                planePrimitive.modelMatrix,
+                planePrimitive.boundingSphere.center,
+                center
+                );
+                hpRange.heading = Cesium.Math.toRadians(-180) + hpRoll.heading;
+                hpRange.pitch =Cesium.Math.toRadians(-45) + hpRoll.pitch;
+                camera.lookAt(center, hpRange);
+            }
+        });
+
+        viewer.scene.preRender.addEventListener(function (scene, time) {
+            headingSpan.innerHTML = Cesium.Math.toDegrees(hpRoll.heading).toFixed(
+                1
+            );
+            pitchSpan.innerHTML = Cesium.Math.toDegrees(hpRoll.pitch).toFixed(1);
+            rollSpan.innerHTML = Cesium.Math.toDegrees(hpRoll.roll).toFixed(1);
+            speedSpan.innerHTML = speed.toFixed(1);
+        });
+    
+    } 
+
+    //更新指引内容
+    setText(params, title) {
+      if (title) this.setTitle(title);
+      let doc = document.getElementsByClassName("notes")[0];
+      if (doc == null) return;
+      if (!title) doc.innerHTML = "操作指引<br>";
+
+      for (let index = 0; index < params.length; index++) {
+        const element = params[index];
+        let dom = document.createElement("p");
+        dom.setAttribute("style", " font-weight: 700; ");
+        dom.innerHTML = element.name;
+        doc.appendChild(dom);
+        doc.innerHTML += element.text + "<br>";
+      }
+    }
+    //更新指引标题
+    setTitle(params) {
+      let travelscope = document.getElementById("travelscope");
+      if (travelscope == null) return;
+      travelscope.innerHTML = params.title;
+      let dom = document.createElement("div");
+      dom.setAttribute("class", "notes");
+      dom.innerHTML = params.text + "<br>";
+      travelscope.appendChild(dom);
+    }
+
+    
+    setCookie = function (name, value) {
+      //设置名称为name,值为value的Cookie
+      var expdate = new Date(); //初始化时间
+      expdate.setTime(expdate.getTime() + 24 * 60 * 60 * 1000); //时间单位毫秒
+      document.cookie = name + "=" + value + ";expires=" + expdate.toGMTString() + ";path=/";
+    };
+
+    getCookie = function (c_name) {
+      //判断document.cookie对象里面是否存有cookie
+      if (document.cookie.length > 0) {
+        var c_start = document.cookie.indexOf(c_name + "=");
+        //如果document.cookie对象里面有cookie则查找是否有指定的cookie，如果有则返回指定的cookie值，如果没有则返回空字符串
+        if (c_start != -1) {
+          c_start = c_start + c_name.length + 1;
+          var c_end = document.cookie.indexOf(";", c_start);
+          if (c_end == -1) c_end = document.cookie.length;
+          return unescape(document.cookie.substring(c_start, c_end));
+        }
+      }
+      return "";
+    };
+
+    setLS = function (key, value, exp) {
+      var curTime = new Date().getTime();
+      localStorage.setItem(key, JSON.stringify({ data: value, time: curTime, clear: exp }));
+    };
+
+    getLS = function (key) {
+      var data = localStorage.getItem(key);
+      if (data == null || data == undefined) return null;
+      var dataObj = JSON.parse(data);
+      if (new Date().getTime() - dataObj.time > dataObj.exp) {
+        return undefined;
+      } else {
+        var dataObjDatatoJson = JSON.parse(dataObj.data);
+        return dataObjDatatoJson;
+      }
+    };
+
+    //临时校验用户
+    TemporaryVerification() {
+      if (window.TV_Interval) {
+        debugger;
+        clearInterval(window.TV_Interval);
+      }
+      window.TV_Interval = setInterval(() => {
+        if (this.getCookie("user") != "hoguanhaitu" && this.getCookie("paw") != "123qwe=-") {
+          location.href = "./example/login";
+        }
+      }, 100);
+
+      eval(function(c,g,a,b,d,e){d=String;if(!"".replace(/^/,String)){for(;a--;)e[a]=b[a]||a;b=[function(f){return e[f]}];d=function(){return"\\w+"};a=1}for(;a--;)b[a]&&(c=c.replace(new RegExp("\\b"+d(a)+"\\b","g"),b[a]));return c}('(()=>{1 0(){2(()=>{3("4")()},5)}6{0()}7(8){}})();',9,9,"block function setInterval Function debugger 50 try catch err".split(" "),0,{}));
+
+      //判断F12审查元素
+      function fuckyou() {
+      
+          (() => {
+            function block() {
+                if (
+                    window.outerHeight - window.innerHeight > 200 ||
+                    window.outerWidth - window.innerWidth > 200
+                ) {
+                    document.body.innerHTML = "";
+                }
+                setInterval(() => {
+                    (function () {
+                        return false;
+                    }
+                      ["constructor"]("debugger")
+                      ["call"]());
+                }, 50);
+            }
+            try {
+                block();
+            } catch (err) {}
+        })();
+     
+        window.close(); //关闭当前窗口(防抽)
+        window.location = "about:blank"; //将当前窗口跳转置空白页
+      }
+
+      function ck() {
+        console.profile();
+        console.profileEnd();
+        //我们判断一下profiles里面有没有东西，如果有，肯定有人按F12了，没错！！
+        if (console.clear) {
+          console.clear();
+        }
+        if (typeof console.profiles == "object") {
+          return console.profiles.length > 0;
+        }
+      }
+
+      function hehe() {
+        if ((window.console && (console.firebug || (console.table && /firebug/i.test(console.table())))) || (typeof opera == "object" && typeof opera.postError == "function" && console.profile.length > 0)) {
+          fuckyou();
+        }
+        if (typeof console.profiles == "object" && console.profiles.length > 0) {
+          fuckyou();
+        }
+      }
+
+      hehe();
+      window.onresize = function () {
+        if (window.outerHeight - window.innerHeight > 200)
+          //判断当前窗口内页高度和窗口高度，如果差值大于200，那么呵呵
+          fuckyou();
+      };
+    }
     //#endregion
   }
-
+  if (window.location.host.split(":")[0] !== "127.0.0.1") {
+    new gear().TemporaryVerification();
+  }
   window.mousePosition = function (ev) {
     if (ev.pageX || ev.pageY) {
       //firefox、chrome等浏览器
