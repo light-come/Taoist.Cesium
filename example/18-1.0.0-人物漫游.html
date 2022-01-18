@@ -18,13 +18,63 @@
       当前模块：<b>漫游行走</b>. 
     </h2>
   </div>
-
+  <div id="toolbar" style="width: 100%; text-align: center; display: flex; justify-content: center; position: absolute; bottom: 50px; z-index: 999; color: #fff; box-shadow: 0 1px 10px 1px rgb(0 0 0 / 12%); backdrop-filter: blur(20px); border-radius: 4px">
+    <table>
+      <tbody>
+        <tr>
+          <td><a style="color: #232323; padding: 10px" href="#">第一人称</a></td>
+          <td><a style="color: #232323; padding: 10px" href="#">第三人称</a></td>
+          <td><a style="color: #232323; padding: 10px" href="#">上帝视角</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
   <div class="map-container" style="z-index: 999;" id="mapBox"></div>
 </body>
 
 </html>
 <script>
+  var a_arr = $("a")
+  for (let index = 0; index < a_arr.length; index++) {
+    const element = a_arr[index];
+    var multiplier = 1
+    element.onclick = function () {
+      var params
+      var options = {}
+      switch (this.innerHTML) {
+          case "第一人称":
+            params = "IntelligentFlyingGame_Visual"
+            options = {
+              visual:{
+                type : 1
+              }
+            }//视角 0是无绑定 1是第一人称 3是第三人称 2是跟随
+          break;  
+          case "第三人称":
+            params = "IntelligentFlyingGame_Visual"
+            options = {
+              visual:{
+                type : 3,
+                height:20 * 200,
+                direction : -35 * 2.5,
+              }
+            }
+          break;
+          case "上帝视角":
+            params = "IntelligentFlyingGame_Visual"
+            options = {
+              visual:{
+                type : 0
+              }
+            }
+          break;
+        default:
+          break;
+      }
 
+      new Gear(viewer)[params](options)
+    }
+  }
   let gear = new Gear();
   setTimeout(() => {
     var by = document.getElementById('travelscope');

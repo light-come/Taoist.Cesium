@@ -15,7 +15,7 @@
       this.Snow = null; //雪
       this.Fog = null; //雾
 
-      window.Debug = false//是否为调试模式
+      window.Debug = true//是否为调试模式
       window.local = 'http://127.0.0.1:8077'
       window.server = 'http://121.40.42.254:8008/'
     }
@@ -223,7 +223,6 @@
       var entity = null;
 
       var array = G.Query_X(viewer, { type: "IntelligentRoaming" });
-      console.log(array);
 
       for (let index = 0; index < array.length; index++) {
         const element = array[index];
@@ -239,12 +238,12 @@
         type: 2,
         zoomTo: false,
       }; //视角 0是无绑定 1是第一人称 3是第三人称 2是跟随
-
+      //console.log(entity,entity.position);
       viewer.IntelligentRoaming_VisualEvent = function (scene, time) {
+        
         if (!Cesium.defined(entity.position)) {
           return;
         }
-
         var position = entity.position.getValue(time);
         var camera = viewer.camera;
         switch (visual.type) {
@@ -259,8 +258,8 @@
             viewer.trackedEntity = entity;
             break;
           case 1:
-            camera.position = new Cesium.Cartesian3(0, 0.0, 1.5); //位置一是前后视距
-            camera.direction = new Cesium.Cartesian3(1.0, 0.0, Cesium.Math.toRadians(0));
+            camera.position = new Cesium.Cartesian3(0, 0.0, options.visual.height ?? 1.5); //位置一是前后视距
+            camera.direction = new Cesium.Cartesian3(1.0, 0.0,Cesium.Math.toRadians(options.visual.direction??0));
             camera.up = new Cesium.Cartesian3(0.0, 0.0, 1.0);
             camera.right = new Cesium.Cartesian3(0.0, -1.0, 0.0);
             break;
@@ -2510,10 +2509,12 @@
 
 
     /**
-     * 飞行游戏
+     * 人物漫游
      */
     example_FlyingGame(tileset) {
       var canvas = this.viewer.canvas;
+      var _this = this
+      var viewer = this.viewer
 
       $("#travelscope").append(`<tbody id="FlyingGame"  class="notes">
         <tr>
@@ -2552,23 +2553,23 @@
         canvas.focus();
 
         var scene = viewer.scene;
-
         var pathPosition = new Cesium.SampledPositionProperty();
+     
         var entityPath = viewer.entities.add({
             position: pathPosition,
             name: "path",
             path: {
-                show: true,
-                leadTime: 0,
-                trailTime: 60,
-                width: 10,
-                resolution: 1,
-                material: new Cesium.PolylineGlowMaterialProperty({
-                    glowPower: 0.3,
-                    taperPower: 0.3,
-                    color: Cesium.Color.PALEGOLDENROD,
-                }),
-            },
+              show: false,
+              leadTime: 0,
+              trailTime: 60,
+              width: 10,
+              resolution: 1,
+              material: new Cesium.PolylineGlowMaterialProperty({
+                  glowPower: 0.3,
+                  taperPower: 0.3,
+                  color: Cesium.Color.PALEGOLDENROD,
+              })
+            }
         });
 
         var camera = viewer.camera;
@@ -2578,7 +2579,7 @@
 
         var hpRange =  new Cesium.HeadingPitchRange(0, 0, 0);
         var speed = 0;
-        var deltaRadians = Cesium.Math.toRadians(5.0);
+        var deltaRadians = Cesium.Math.toRadians(0.15);
         var hpRoll =  new Cesium.HeadingPitchRoll(0, 0, 0);//new Cesium.HeadingPitchRoll();
         var position = Cesium.Cartesian3.fromDegrees(
             120.80491,
@@ -2590,10 +2591,8 @@
             "west"
         );
         var speedVector = new Cesium.Cartesian3();
-        var then_state = false//判断模型加载状态
    
         function then (model) {
-          then_state = true
             // Play and loop all animations at half-speed
             model.activeAnimations.addAll({
                 multiplier: 0.5,
@@ -2614,11 +2613,120 @@
             hpRange.pitch = pitch;
             hpRange.range = r * 50.0;
 
-            
             clampToHeight()
         };
+        
+        /**
+         * 设置第一人称
+         */
+        function setCamera() {
+          
+          if(!viewer.IFV_TYPE)return
 
+          var options = _this.viewer.IFV_TYPE
+          switch (_this.viewer.IFV_TYPE.visual.type) {
+            case 0:
+                _this.IntelligentRoaming_Visual({
+                  visual:{
+                    type : 0,
+                    height:10.4 * 2,
+                    direction : -35 * 2.5,
+                  }
+                })
+                viewer.IntelligentRoaming_VisualEvent = undefined
+              return
+              case 3:
+                if(viewer.IntelligentRoaming_VisualEvent) return
+                viewer.IntelligentRoaming_VisualEvent = function (scene, time) {
+                  var entity = {};  
+                  if (!Cesium.defined(position)) {
+                    return;
+                  }
+             
 
+                  var camera = viewer.camera;
+                  // console.log(camera)
+                  camera.position = new Cesium.Cartesian3(-5, -0, Cesium.Math.toRadians(options.visual.height??10));
+                  camera.direction = new Cesium.Cartesian3(0.3987584249598806, 0.009354600409072824,Cesium.Math.toRadians( options.visual.direction??-65));
+                  camera.up = new Cesium.Cartesian3(0.916756064443912, 0.021506470654472087, 0.39886813613686706);
+                  camera.right = new Cesium.Cartesian3(0.02345286397916243, -0.9997249437576193, -2.908438299226157);
+                  if (!Cesium.defined(position)) {
+                    console.warn({position:null})
+                    return;
+                  }
+
+                  var transform;
+                 
+                  if (!Cesium.defined(entity.orientation)) {
+                    transform = Cesium.Transforms.eastNorthUpToFixedFrame(position);
+                  }else {
+                    
+                    var orientation = entity.orientation.getValue(time);
+                    if (!Cesium.defined(orientation)) {
+                      console.warn({orientation:null})
+                      return;
+                    }
+                    transform = Cesium.Matrix4.fromRotationTranslation(Cesium.Matrix3.fromQuaternion(orientation), position);
+                  }
+                  
+                  var heading = Cesium.Math.toDegrees(hpRoll.heading)//Cesium.Math.toRadians(heading + 180)
+                  viewer.camera.flyTo({
+                    //destination: camera.position, //经度、纬度、高度
+                    orientation: {
+                      heading: Cesium.Math.toRadians(heading + 180), //绕垂直于地心的轴旋转
+                   
+                    },
+                    duration: 0,
+                  });
+
+                  // Save camera state
+                  var offset = Cesium.Cartesian3.clone(camera.position);
+                  var direction = Cesium.Cartesian3.clone(camera.direction);
+                  var up = Cesium.Cartesian3.clone(camera.up);
+          
+                  // Set camera to be in model's reference frame.
+                  camera.lookAtTransform(transform);
+          
+                  // Reset the camera state to the saved state so it appears fixed in the model's frame.
+                  Cesium.Cartesian3.clone(offset, camera.position);
+                  Cesium.Cartesian3.clone(direction, camera.direction);
+                  Cesium.Cartesian3.clone(up, camera.up);
+                  Cesium.Cartesian3.cross(direction, up, camera.right);
+                };
+                viewer.scene.postUpdate.addEventListener(viewer.IntelligentRoaming_VisualEvent);
+
+              return
+              case 1:
+                viewer.scene.postUpdate.removeEventListener(viewer.IntelligentRoaming_VisualEvent);
+                viewer.IntelligentRoaming_VisualEvent = undefined
+                
+                var point = {};
+                var cartographic = Cesium.Cartographic.fromCartesian(position);
+                point.x = Cesium.Math.toDegrees(cartographic.longitude);
+                point.y = Cesium.Math.toDegrees(cartographic.latitude);
+                point.z = cartographic.height + 15; //还原点位高度
+      
+                var heading = Cesium.Math.toDegrees(hpRoll.heading)
+               
+                // console.log(heading)
+                viewer.camera.flyTo({
+                  destination: Cesium.Cartesian3.fromDegrees(point.x, point.y, point.z), //经度、纬度、高度
+                  orientation: {
+                    heading: Cesium.Math.toRadians(heading + 180), //绕垂直于地心的轴旋转
+                    pitch: 0, //绕纬度线旋转
+                    roll: 0, //绕经度线旋转
+                  },
+                  duration: 0,
+                });
+      
+                return
+            default:
+              break;
+          }
+         
+         
+
+        }
         function clampToHeight() {
         //  var positionProperty = pathPosition;
 
@@ -2644,17 +2752,13 @@
 
               if(position)
               {
-                // var point = {};
-                // var cartographic = Cesium.Cartographic.fromCartesian(scene.clampToHeight(position, objectsToExclude));
-                // point.x = Cesium.Math.toDegrees(cartographic.longitude);
-                // point.y = Cesium.Math.toDegrees(cartographic.latitude);
-                // point.z = cartographic.height; //还原点位高度
-                position = scene.clampToHeight(position, objectsToExclude) //Cesium.Cartesian3.fromDegrees(point.x, point.y, point.z)
-                if(position)
-                  cache_position = position
-                  else
-                  position = cache_position
-
+                if(keyDown_32){
+                  position = scene.clampToHeight(position, objectsToExclude) //Cesium.Cartesian3.fromDegrees(point.x, point.y, point.z)
+                  if(position)
+                    cache_position = position
+                    else
+                    position = cache_position
+                }
                 // console.log(position)
               }
             
@@ -2664,6 +2768,8 @@
           }
       
         }
+
+
         var planePrimitive = scene.primitives.add(
           Cesium.Model.fromGltf({
             url: (Debug?local:server) + "/%E4%BA%BA%E7%89%A9%E7%8E%AF%E6%A8%A1%E5%9E%8B/%E7%8E%AF%E5%A2%83/%E8%B5%B0%E8%B7%AF%E7%9A%84%E9%B8%AD%E5%AD%90/scene.gltf",
@@ -2676,77 +2782,139 @@
             minimumPixelSize: 128,
           })
         );
+
+
+        planePrimitive.type = 'IntelligentRoaming'
+        planePrimitive.id = "Will I still be able to use data roaming after I have NO!"
+
         planePrimitive.readyPromise
         .then(then)
         .otherwise(function (error) {
           console.log(error);
         });
-
+        let keyDown_32 = true 
         document.addEventListener("keydown", function (e) {
-            switch (e.keyCode) {
-                case 83://S
-                  speed = -10;
-                  // speed down
-                  // speed = Math.max(--speed, 1);
-                break;
-                case 87://W
-                  speed = 10;
-                  // speed up
-                  // speed = Math.min(++speed, 100);
-                break;
-                // case 65://a
-                //   hpRoll.pitch += deltaRadians;
-                //   if (hpRoll.pitch > Cesium.Math.TWO_PI) {
-                //   hpRoll.pitch -= Cesium.Math.TWO_PI;
-                //   }
-                // break;  
-                // case 68://d   
-                //   hpRoll.pitch -= deltaRadians;
-                //   if (hpRoll.pitch < -Cesium.Math.TWO_PI) {
-                //   hpRoll.pitch += Cesium.Math.TWO_PI;
-                //   }
-                // break;
-                case 68:
-                  hpRoll.heading += deltaRadians;
-                  if (hpRoll.heading > Cesium.Math.TWO_PI) {
-                  hpRoll.heading -= Cesium.Math.TWO_PI;
-                  }
-                break;
-                case 65:
+          if (e.code == "ShiftLeft" && e.keyCode == 68) {
+            // speed up
+            speed = 25;
+          }
+          switch (e.keyCode) {
+              case 83://S
+                speed = -10;
+                // speed down
+                // speed = Math.max(--speed, 1);
+              break;
+              case 87://W
+                speed = 10;
               
-                  hpRoll.heading -= deltaRadians;
-                  if (hpRoll.heading < 0.0) {
-                  hpRoll.heading += Cesium.Math.TWO_PI;
+              break;
+
+              case 68:
+
+                let add = 0
+                let interval_add = setInterval(() => {
+                  hpRoll.heading += deltaRadians;
+                  add++
+                  if(add == 1*10){
+                    clearInterval(interval_add)
                   }
-                break;     
-                case 32 :
+                }, 10);
+                  
+                if (hpRoll.heading > Cesium.Math.TWO_PI) {
+                  hpRoll.heading -= Cesium.Math.TWO_PI;
+                }
+              break;
+              case 65:
+            
+                let reduce = 0
+                let interval_reduce = setInterval(() => {
+                  hpRoll.heading -= deltaRadians;
+                  reduce++
+                  if(reduce == 1*10){
+                    clearInterval(interval_reduce)
+                  }
+                }, 10);
+                
+                if (hpRoll.heading < 0.0) {
+                  hpRoll.heading += Cesium.Math.TWO_PI;
+                }
+              break;     
+              case 32:
+
+                if(keyDown_32){
+
                   var point = {};
                   var cartographic = Cesium.Cartographic.fromCartesian(position);
                   point.x = Cesium.Math.toDegrees(cartographic.longitude);
                   point.y = Cesium.Math.toDegrees(cartographic.latitude);
                   point.z = cartographic.height; //还原点位高度
-                  console.log(point.z)
-                  position = Cesium.Cartesian3.fromDegrees(point.x, point.y, point.z + 5)
-         
-                break;
-                // //模型抬头
-                  // // turn right
-                  // hpRoll.roll += deltaRadians;
-                  // if (hpRoll.roll > Cesium.Math.TWO_PI) {
-                  // hpRoll.roll -= Cesium.Math.TWO_PI;
-                  // }
+                  console.log(point.z + 15)
+    
 
-                    // //模型低头
-                    // // turn left
-                    // // roll left until
-                    // hpRoll.roll -= deltaRadians;
-                    // if (hpRoll.roll < 0.0) {
-                    // hpRoll.roll += Cesium.Math.TWO_PI;
-                    // }
-                default:
-            }
+                  if(!Cesium.interval_z && !Cesium.interval_z_){
+                    let z = 0; let z_ = 0
+                    Cesium.interval_z = setInterval(() => {
+                      position = Cesium.Cartesian3.fromDegrees(point.x, point.y, point.z + (z / 10))
+                      z += 4
+                      
+                      if(z >= 1*100){
+                        clearInterval(Cesium.interval_z)
+                        Cesium.interval_z = false
+                        console.log((z / 10))
+                        z_ = z
+                        Cesium.interval_z_ = setInterval(() => {
+                          
+                          z_ -= 4
+                          console.log(z_)
+                          position = Cesium.Cartesian3.fromDegrees(point.x, point.y, point.z + (z_ / 10))
+
+                          if(z_ <= 0){
+                            clearInterval(Cesium.interval_z_)
+                            Cesium.interval_z_ = false
+                            keyDown_32 = true
+                          }
+                        }, 10);
+                      }
+                      
+                    }, 10);
+            
+                  }
+
+                  
+
+                  keyDown_32 = false
+                }
+                
+              break;
+              // //模型抬头
+                // // turn right
+                // hpRoll.roll += deltaRadians;
+                // if (hpRoll.roll > Cesium.Math.TWO_PI) {
+                // hpRoll.roll -= Cesium.Math.TWO_PI;
+                // }
+
+                  // //模型低头
+                  // // turn left
+                  // // roll left until
+                  // hpRoll.roll -= deltaRadians;
+                  // if (hpRoll.roll < 0.0) {
+                  // hpRoll.roll += Cesium.Math.TWO_PI;
+                  // }
+              default:
+          }
+          if (e.shiftKey) {
+            // speed up
+            speed = 25;
+          }
+
         });
         document.addEventListener("keyup", function (e) {
+         
+          if (e.code == "ShiftLeft" && e.keyCode == 68) {
+            // speed up
+            speed = 10;
+          }
+
           switch (e.keyCode) {
               case 83://S
                 speed = 0;
@@ -2754,7 +2922,7 @@
               case 87://W
                 speed = 0;
               break;
-        
+             
               case 68:
                 hpRoll.heading += deltaRadians;
                 if (hpRoll.heading > Cesium.Math.TWO_PI) {
@@ -2762,7 +2930,6 @@
                 }
               break;
               case 65:
-            
                 hpRoll.heading -= deltaRadians;
                 if (hpRoll.heading < 0.0) {
                 hpRoll.heading += Cesium.Math.TWO_PI;
@@ -2770,6 +2937,7 @@
               break;
             
           }
+          
         });
         var headingSpan = document.getElementById("heading");
         var pitchSpan = document.getElementById("pitch");
@@ -2777,7 +2945,6 @@
         var speedSpan = document.getElementById("speed");
         var fromBehind = document.getElementById("fromBehind");
 
-       
 
         viewer.scene.preUpdate.addEventListener(function (scene, time) {
             
@@ -2798,9 +2965,13 @@
                 speedVector,
                 position
             );
-            
-            pathPosition.addSample(Cesium.JulianDate.now(), position);
 
+            // planePrimitive.position = pathPosition
+            // planePrimitive.hpRoll = hpRoll
+
+
+            pathPosition.addSample(Cesium.JulianDate.now(), position);
+       
             Cesium.Transforms.headingPitchRollToFixedFrame(
                 position,
                 new Cesium.HeadingPitchRoll(Cesium.Math.toRadians(Cesium.Math.toDegrees(hpRoll.heading)), Cesium.Math.toRadians(Cesium.Math.toDegrees(hpRoll.roll)), Cesium.Math.toRadians(Cesium.Math.toDegrees(hpRoll.pitch))),
@@ -2808,18 +2979,9 @@
                 fixedFrameTransform,
                 planePrimitive.modelMatrix
             );
-
-            if (false && then_state) {// 第一视角
-                // Zoom to model
-                Cesium.Matrix4.multiplyByPoint(
-                planePrimitive.modelMatrix,
-                planePrimitive.boundingSphere.center,
-                center
-                );
-                hpRange.heading = Cesium.Math.toRadians(-180) + hpRoll.heading;
-                hpRange.pitch =Cesium.Math.toRadians(-45) + hpRoll.pitch;
-                camera.lookAt(center, hpRange);
-            }
+            
+            setCamera()
+            
         });
 
         viewer.scene.preRender.addEventListener(function (scene, time) {
@@ -2832,7 +2994,10 @@
         });
     
     } 
-
+    //视角切换
+    IntelligentFlyingGame_Visual(type){
+      this.viewer.IFV_TYPE = type
+    }
     //更新指引内容
     setText(params, title) {
       if (title) this.setTitle(title);
@@ -2849,6 +3014,7 @@
         doc.innerHTML += element.text + "<br>";
       }
     }
+
     //更新指引标题
     setTitle(params) {
       let travelscope = document.getElementById("travelscope");
