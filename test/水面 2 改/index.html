@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>水面</title>
+  <!-- 加载基础资源 -->
+  <link rel="stylesheet" href="static/css/bucket.css">
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+  <style>
+    #toolbar {
+        background: rgba(42, 42, 42, 0.8);
+        padding: 4px;
+        border-radius: 4px;
+    }
+    #toolbar button {
+        display: block;
+    }
+    #toolbar input {
+        vertical-align: middle;
+        padding-top: 2px;
+        padding-bottom: 2px;
+    }
+    #toolbar .header {
+        font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="cesiumContainer" class="fullSize"></div>
+  <div id="toolbar">
+    <table>
+      <tbody>
+        <tr>
+          <td class="header">水面设置</td>
+        </tr>
+        <tr>
+          <td>Color</td>
+          <td><select data-bind="options: colors, value: color"></select></td>
+        </tr>
+        <tr>
+          <td>Alpha</td>
+          <td>
+            <input type="range" min="0.0" max="1" step="0.01" data-bind="value: alpha, valueUpdate: 'input'">
+            <input type="text" size="5" data-bind="value: alpha">
+          </td>
+        </tr>
+        <tr>
+          <!--实时改变流速 flowSpeed=1.4（单位是米/秒）-->
+          <td>水流速度(m/s)</td>
+          <td>
+            <input type="range" min="0.1" max="5.0" step="0.01" data-bind="value: speed, valueUpdate: 'input'">
+            <input type="text" size="5" data-bind="value: speed">
+          </td>
+        </tr>
+        <tr>
+          <!--实时改变水面波纹宽度waveWidth=0.4（单位是米）-->
+          <td>波纹宽度(m)</td>
+          <td>
+            <input type="range" min="0.1" max="10" step="0.01" data-bind="value: width, valueUpdate: 'input'">
+            <input type="text" size="5" data-bind="value: width">
+          </td>
+        </tr>
+        <tr>
+          <!--实时改变水流方向与正北方向夹角flowDirection = 45（设定范围0-360）-->
+          <td>水流方向(°)</td>
+          <td>
+            <input type="range" min="1" max="360" step="1" data-bind="value: flowDirection, valueUpdate: 'input'">
+            <input type="text" size="5" data-bind="value: flowDirection">
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.0/beautify.min.js"></script>
+<script src="static/js/Cesium.js"></script>
+<script>
+  var viewer = new Cesium.Viewer('cesiumContainer', {
+    fullscreenButton: true
+  });
+  
+  //应用插件
+  var google = new Cesium.UrlTemplateImageryProvider({
+    url: 'http://mt0.google.cn/vt/lyrs=s&hl=zh-CN&x={x}&y={y}&z={z}',
+    tilingScheme: new Cesium.WebMercatorTilingScheme(),
+    maximumLevel: 20
+  });
+  viewer.imageryLayers.addImageryProvider(google);
+
+  var tileset = new Cesium.DE3DTileset({
+    url: 'https://dataearth-preset.bd.bcebos.com/system_resource/xinghan/model.json',
+    shadows: Cesium.ShadowMode.ENABLED,
+    viewer: viewer
+  });
+  viewer.tilesetLayers.add(tileset);
+
+  
+  var water = new Cesium.DEWater(viewer);
+
+
+  var waterPostion = [];
+  waterPostion.push(new Cesium.Cartesian3(-2174305.1943790065, 4411465.184221281, 4047475.9115872956));
+  waterPostion.push(new Cesium.Cartesian3(-2174299.6974439668, 4411454.412913701, 4047489.8523059497));
+  waterPostion.push(new Cesium.Cartesian3(-2174332.5774196656, 4411437.5586786475, 4047490.0146576636));
+  waterPostion.push(new Cesium.Cartesian3(-2174338.1957250447, 4411447.740728991, 4047476.2190779266));
+  var waterpolygon = new Cesium.PolygonGeometry({
+    polygonHierarchy: new Cesium.PolygonHierarchy(waterPostion),
+    perPositionHeight: true
+
+  });
+
+  water.waterPolygon = waterpolygon;
+  viewer.scene.waterCollection.add(water);
+
+
+  viewer.camera.flyTo({
+    destination: Cesium.Cartesian3.fromDegrees(116.23792082284271, 39.64075639276979, 150),
+    orientation: {
+      heading: Cesium.Math.toRadians(357.35068101799146),
+      pitch: Cesium.Math.toRadians(-31.92035363183754),
+      roll: 0.0
+    }
+  });
+
+  // var alphaValue = 0.5;
+  // var viewModel = {
+  //   color: '蓝',
+  //   colors: ['蓝', '绿'],
+  //   alpha: alphaValue,
+  //   speed: 0.7,
+  //   width: 0.4,
+  //   flowDirection: 45
+  // }
+  // Cesium.knockout.track(viewModel);
+  // var toolbar = document.getElementById('toolbar');
+  // Cesium.knockout.applyBindings(viewModel, toolbar);
+
+  // var colorVariable = 1;
+  // //绑定颜色值
+  // Cesium.knockout.getObservable(viewModel, 'color').subscribe(
+  //   function (newValue) {
+  //     if (newValue == '蓝') {
+  //       water._waterColor = new Cesium.Color(0.439, 0.564, 0.788, alphaValue);
+  //     } else if (newValue == '绿') {
+  //       colorVariable = 2;
+  //       water._waterColor = new Cesium.Color(0.5, 1.0, 1.0, alphaValue);
+  //     }
+  //   }
+  // );
+  // //绑定Alpha值
+  // Cesium.knockout.getObservable(viewModel, 'alpha').subscribe(
+  //   function (newValue) {
+  //     if (water == undefined)
+  //       return;
+  //     alphaValue = newValue;
+  //     if (colorVariable == 1) {
+  //       water._waterColor = new Cesium.Color(0.439, 0.564, 0.788, alphaValue);
+  //     } else if (colorVariable == 2) {
+  //       water._waterColor = new Cesium.Color(0.5, 1.0, 1.0, alphaValue);
+  //     }
+  //   }
+  // );
+  // //绑定水流速度
+  // Cesium.knockout.getObservable(viewModel, 'speed').subscribe(
+  //   function (newValue) {
+  //     if (water == undefined)
+  //       return;
+  //     water.flowSpeed = newValue;
+  //   }
+  // );
+  // //绑定水面波纹宽度
+  // Cesium.knockout.getObservable(viewModel, 'width').subscribe(
+  //   function (newValue) {
+  //     if (water == undefined)
+  //       return;
+  //     water.waveWidth = newValue;
+  //   }
+  // );
+  // //绑定水流方向
+  // Cesium.knockout.getObservable(viewModel, 'flowDirection').subscribe(
+  //   function (newValue) {
+  //     if (water == undefined)
+  //       return;
+  //     water.flowDirection = newValue;
+  //   }
+  // );
+
+</script>
+</html>
