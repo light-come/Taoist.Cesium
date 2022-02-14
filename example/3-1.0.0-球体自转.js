@@ -10,7 +10,6 @@ script.forEach(element => {
  */
 function init(viewer) {
   const turn = G.Turn(viewer)
-
   G.BaseLayer(viewer,{
     name: '影像底图',
     type: 'mapbox',//www_google sl_geoq
@@ -26,8 +25,6 @@ function init(viewer) {
 
 window.onload = () =>{
   (function () {
-
-
     //初始化地球0
     if (G.U.webglReport()) {//判断浏览器是否支持WebGL
       G.create3D({

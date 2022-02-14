@@ -44,7 +44,7 @@ window.onload = () =>{
                 })
                 
                 var LaunchBottom = new Cesium.Model.fromGltf({
-                  url: (Debug?local:server) + '/%E4%BA%BA%E7%89%A9%E7%8E%AF%E6%A8%A1%E5%9E%8B/%E7%8E%AF%E5%A2%83/%E5%8F%91%E5%B0%84%E5%9F%BA%E5%9C%B0-1(%E5%AE%9E%E6%99%AF)/spacex-launch-pad-complex/Landscape_0.glb',
+                  url: (WEBGL_DEBUG?local:server) + '/%E4%BA%BA%E7%89%A9%E7%8E%AF%E6%A8%A1%E5%9E%8B/%E7%8E%AF%E5%A2%83/%E5%8F%91%E5%B0%84%E5%9F%BA%E5%9C%B0-1(%E5%AE%9E%E6%99%AF)/spacex-launch-pad-complex/Landscape_0.glb',
                   modelMatrix:  Cesium.Transforms.headingPitchRollToFixedFrame(
                       Cesium.Cartesian3.fromDegrees(-80.6,28.6,130),
                       new Cesium.HeadingPitchRoll(
@@ -69,7 +69,7 @@ window.onload = () =>{
                  
                 //发射场
                 var LaunchSite = new Cesium.Model.fromGltf({
-                  url: (Debug?local:server) + '/%E4%BA%BA%E7%89%A9%E7%8E%AF%E6%A8%A1%E5%9E%8B/%E7%8E%AF%E5%A2%83/%E5%8F%91%E5%B0%84%E5%9F%BA%E5%9C%B0-1(%E5%AE%9E%E6%99%AF)/spacex-launch-pad-complex/spacex-launch-pad-complex-max.glb',
+                  url: (WEBGL_DEBUG?local:server) + '/%E4%BA%BA%E7%89%A9%E7%8E%AF%E6%A8%A1%E5%9E%8B/%E7%8E%AF%E5%A2%83/%E5%8F%91%E5%B0%84%E5%9F%BA%E5%9C%B0-1(%E5%AE%9E%E6%99%AF)/spacex-launch-pad-complex/spacex-launch-pad-complex-max.glb',
                   modelMatrix:  Cesium.Transforms.headingPitchRollToFixedFrame(
                       Cesium.Cartesian3.fromDegrees(-80.6,28.6,130),
                       new Cesium.HeadingPitchRoll(
@@ -92,7 +92,7 @@ window.onload = () =>{
                
                 //黑色的猎鹰9号
                 let SPACE_X = G.aGLTF(viewer,{
-                  url:  (Debug?local:server) + '/%E4%BA%BA%E7%89%A9%E7%8E%AF%E6%A8%A1%E5%9E%8B/%E7%89%A9%E4%BD%93/%E7%81%AB%E7%AE%AD/%E7%8C%8E%E9%B9%B0%E4%B9%9D%E5%8F%B7/scene.gltf',
+                  url:  (WEBGL_DEBUG?local:server) + '/%E4%BA%BA%E7%89%A9%E7%8E%AF%E6%A8%A1%E5%9E%8B/%E7%89%A9%E4%BD%93/%E7%81%AB%E7%AE%AD/%E7%8C%8E%E9%B9%B0%E4%B9%9D%E5%8F%B7/scene.gltf',
                   scale:0.06 / 2,//5
                   position:{
                     x: -80.60008139822472,

@@ -57,7 +57,7 @@ window.onload = () =>{
                 _("example_runshineAnalysis");
                 var tileset = G.aTiles(viewer, {
                   type: "房间",
-                  url: (Debug?local:server) + '/%E4%BA%BA%E7%89%A9%E7%8E%AF%E6%A8%A1%E5%9E%8B/%E7%8E%AF%E5%A2%83/%E6%B2%99%E6%BC%A0%E7%81%B02p/de-dust2-cs-map/tileset/tileset.json', 
+                  url: (WEBGL_DEBUG?local:server) + '/%E4%BA%BA%E7%89%A9%E7%8E%AF%E6%A8%A1%E5%9E%8B/%E7%8E%AF%E5%A2%83/%E6%B2%99%E6%BC%A0%E7%81%B02p/de-dust2-cs-map/tileset/tileset.json', 
                   flyTo: false,
                   heightOffset: 0,
                   height: 0,

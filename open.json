@@ -1,0 +1,33 @@
+{
+  "version" : "1.0.0",
+  "name": "实列引用地址",
+  "resources":{
+    "debug_uri": "//192.168.2.17",
+    "release_uri": "//192.168.16.1",
+    "path":"/example/",
+    "url":"`${uri}${path}${data[0].index}-${version}-${data[0].name}.html`",
+    "thumbnail":"`${uri}/assets/images/about/${data[0].name}.png`"
+  },
+  "debug":true,
+  "page": 18,
+  "data": [
+    {"index":1,"name":"你好地球"},
+    {"index":2,"name":"建筑模型"},
+    {"index":3,"name":"球体自转"},
+    {"index":4,"name":"添加底图"},
+    {"index":5,"name":"加载GLTF或GLB模型"},
+    {"index":6,"name":"登月动画"},
+    {"index":7,"name":"模型销毁"},
+    {"index":8,"name":"人物巡逻"},
+    {"index":9,"name":"区域范围"},
+    {"index":10,"name":"场景透明"},
+    {"index":11,"name":"模型运动"},
+    {"index":12,"name":"绘制"},
+    {"index":13,"name":"测量"}, 
+    {"index":14,"name":"内置控件"}, 
+    {"index":15,"name":"天气模拟"}, 
+    {"index":16,"name":"带你去爬山"},
+    {"index":17,"name":"旋转控件"},
+    {"index":18,"name":"人物漫游"}
+  ]
+}

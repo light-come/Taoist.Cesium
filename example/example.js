@@ -15,9 +15,6 @@
       this.Snow = null; //雪
       this.Fog = null; //雾
 
-      window.Debug = true//是否为调试模式
-      window.local = 'http://127.0.0.1:8077'
-      window.server = 'http://121.40.42.254:8008/'
     }
 
     //#region example
@@ -1120,7 +1117,7 @@
         _this.IntelligentRoamingDynamicLine(viewer, element);
       });
 
-      var uri = (Debug?local:server) + "/%E4%BA%BA%E7%89%A9%E7%8E%AF%E6%A8%A1%E5%9E%8B/%E4%BA%BA%E7%89%A9/%E7%99%BD%E8%86%9C%E8%A1%8C%E8%B5%B0/scene.gltf";
+      var uri = (WEBGL_DEBUG?local:server) + "/%E4%BA%BA%E7%89%A9%E7%8E%AF%E6%A8%A1%E5%9E%8B/%E4%BA%BA%E7%89%A9/%E7%99%BD%E8%86%9C%E8%A1%8C%E8%B5%B0/scene.gltf";
       var _options = { positions: FR_CURVE };
       _options.url = uri;
       _options.scale = 0.01;
@@ -2772,7 +2769,7 @@
 
         var planePrimitive = scene.primitives.add(
           Cesium.Model.fromGltf({
-            url: (Debug?local:server) + "/%E4%BA%BA%E7%89%A9%E7%8E%AF%E6%A8%A1%E5%9E%8B/%E7%8E%AF%E5%A2%83/%E8%B5%B0%E8%B7%AF%E7%9A%84%E9%B8%AD%E5%AD%90/scene.gltf",
+            url: (WEBGL_DEBUG?local:server) + "/%E4%BA%BA%E7%89%A9%E7%8E%AF%E6%A8%A1%E5%9E%8B/%E7%8E%AF%E5%A2%83/%E8%B5%B0%E8%B7%AF%E7%9A%84%E9%B8%AD%E5%AD%90/scene.gltf",
             modelMatrix: Cesium.Transforms.headingPitchRollToFixedFrame(
                 position,
                 hpRoll,
@@ -3138,9 +3135,13 @@
     }
     //#endregion
   }
-  if (window.location.host.split(":")[0] !== "127.0.0.1") {
-    new gear().TemporaryVerification();
-  }
+
+  //校验
+  // if (window.location.host.split(":")[0] !== "127.0.0.1") {
+  //   new gear().TemporaryVerification();
+  // }
+
+  
   window.mousePosition = function (ev) {
     if (ev.pageX || ev.pageY) {
       //firefox、chrome等浏览器
