@@ -1,4 +1,4 @@
-var script = [' <script type="text/javascript" src="example.js"></script>', '<!-- 初始化三维库 --><script type="text/javascript" src="/lib/index.js" libpath="../" include="Taoist"></script>'];
+var script = [ '<!-- 初始化三维库 --><script type="text/javascript" src="/lib/index.js" libpath="../" include="Taoist"></script>'];
 script.forEach(element => {
   document.writeln(element);
 });
