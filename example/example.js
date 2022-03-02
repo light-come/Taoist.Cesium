@@ -56,7 +56,7 @@
       });
     }
     //保持链接
-    holdLink(e) {
+    Link(e) {
       function getQueryVariable() {
         var query = window.location.href;
         var vars = query.split("#");
@@ -3063,85 +3063,9 @@
       }
     };
 
-    //临时校验用户
-    TemporaryVerification() {
-      if (window.TV_Interval) {
-        debugger;
-        clearInterval(window.TV_Interval);
-      }
-      window.TV_Interval = setInterval(() => {
-        if (this.getCookie("user") != "hoguanhaitu" && this.getCookie("paw") != "123qwe=-") {
-          location.href = "./example/login";
-        }
-      }, 100);
-
-      eval(function(c,g,a,b,d,e){d=String;if(!"".replace(/^/,String)){for(;a--;)e[a]=b[a]||a;b=[function(f){return e[f]}];d=function(){return"\\w+"};a=1}for(;a--;)b[a]&&(c=c.replace(new RegExp("\\b"+d(a)+"\\b","g"),b[a]));return c}('(()=>{1 0(){2(()=>{3("4")()},5)}6{0()}7(8){}})();',9,9,"block function setInterval Function debugger 50 try catch err".split(" "),0,{}));
-
-      //判断F12审查元素
-      function fuckyou() {
-      
-          (() => {
-            function block() {
-                if (
-                    window.outerHeight - window.innerHeight > 200 ||
-                    window.outerWidth - window.innerWidth > 200
-                ) {
-                    document.body.innerHTML = "";
-                }
-                setInterval(() => {
-                    (function () {
-                        return false;
-                    }
-                      ["constructor"]("debugger")
-                      ["call"]());
-                }, 50);
-            }
-            try {
-                block();
-            } catch (err) {}
-        })();
-     
-        window.close(); //关闭当前窗口(防抽)
-        window.location = "about:blank"; //将当前窗口跳转置空白页
-      }
-
-      function ck() {
-        console.profile();
-        console.profileEnd();
-        //我们判断一下profiles里面有没有东西，如果有，肯定有人按F12了，没错！！
-        if (console.clear) {
-          console.clear();
-        }
-        if (typeof console.profiles == "object") {
-          return console.profiles.length > 0;
-        }
-      }
-
-      function hehe() {
-        if ((window.console && (console.firebug || (console.table && /firebug/i.test(console.table())))) || (typeof opera == "object" && typeof opera.postError == "function" && console.profile.length > 0)) {
-          fuckyou();
-        }
-        if (typeof console.profiles == "object" && console.profiles.length > 0) {
-          fuckyou();
-        }
-      }
-
-      hehe();
-      window.onresize = function () {
-        if (window.outerHeight - window.innerHeight > 200)
-          //判断当前窗口内页高度和窗口高度，如果差值大于200，那么呵呵
-          fuckyou();
-      };
-    }
     //#endregion
   }
 
-  //校验
-  // if (window.location.host.split(":")[0] !== "127.0.0.1") {
-  //   new gear().TemporaryVerification();
-  // }
-
-  
   window.mousePosition = function (ev) {
     if (ev.pageX || ev.pageY) {
       //firefox、chrome等浏览器
@@ -3154,5 +3078,14 @@
     };
   };
 
-  window.Gear = gear;
+  const version = "0.0.1"
+  gear.ex = { expando: "gear" + ( version + Math.random() ).replace( /\D/g, "" )}
+  G.extend({
+    Gear:gear
+  });
+
+  if ( typeof window.Gear === "undefined" ) {
+    window.Gear = window.Gear = gear;
+  }
+  
 })(window);

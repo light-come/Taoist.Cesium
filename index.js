@@ -1,5 +1,5 @@
   
-var script = [' <script type="text/javascript" src="/example/example.js"></script>'
+var script = [
 //编辑器资源
 ,'<link rel=stylesheet href="/lib/plugins/codemirror-5.14.2/doc/docs.css">'
 ,'<link rel="stylesheet" href="/lib/plugins/codemirror-5.14.2/lib/codemirror.css">'
@@ -172,7 +172,7 @@ window.onload = () => {
   //初始化交互信息
   init(function () {
     //保持链接
-    new Gear()["holdLink"](function (uri) {
+    new G.Gear()["Link"](function (uri) {
       if(uri)
       var by = document.getElementById('core_content')
       if(by)by.setAttribute("src",uri)//+'?'+new Date().getTime()
