@@ -3,7 +3,7 @@ window.onload = () =>{
   
     function () {
 
-      let _LEM = {}; G.U.Get((WEBGL_DEBUG?local:server) + "/AP11.json",function (data) {
+      let _LEM = {}; G.U.Get((WEBGL_DEBUG?WEBGL_Local:WEBGL_Server) + "/AP11.json",function (data) {
         _LEM = data
         init()
       })
@@ -131,7 +131,7 @@ window.onload = () =>{
           r:60.609705301466434
         }
         var SPACE_X_BASE = G.aGLTF(viewer,{
-          url: (WEBGL_DEBUG?local:server) + '/%E4%BA%BA%E7%89%A9%E7%8E%AF%E6%A8%A1%E5%9E%8B/%E7%89%A9%E4%BD%93/%E7%81%AB%E7%AE%AD/%E7%81%AB%E7%AE%AD%E5%96%B7%E5%8F%A3/scene.gltf',
+          url: (WEBGL_DEBUG?WEBGL_Local:WEBGL_Server) + '/%E4%BA%BA%E7%89%A9%E7%8E%AF%E6%A8%A1%E5%9E%8B/%E7%89%A9%E4%BD%93/%E7%81%AB%E7%AE%AD/%E7%81%AB%E7%AE%AD%E5%96%B7%E5%8F%A3/scene.gltf',
           scale:5,//5
           position:SPACE_X_BASE_position
         }) 
@@ -147,7 +147,7 @@ window.onload = () =>{
           r:0
         }
         // var SPACE_X = G.aGLTF(viewer,{
-        //   url: (WEBGL_DEBUG?local:server) + '/%E4%BA%BA%E7%89%A9%E7%8E%AF%E6%A8%A1%E5%9E%8B/%E7%89%A9%E4%BD%93/%E7%81%AB%E7%AE%AD/%E6%9B%B4%E5%A5%BD%E7%9A%84%E9%BE%99%E9%A3%9E%E8%88%B9/spacex-its-mars-lander.glb',
+        //   url: (WEBGL_DEBUG?WEBGL_Local:WEBGL_Server) + '/%E4%BA%BA%E7%89%A9%E7%8E%AF%E6%A8%A1%E5%9E%8B/%E7%89%A9%E4%BD%93/%E7%81%AB%E7%AE%AD/%E6%9B%B4%E5%A5%BD%E7%9A%84%E9%BE%99%E9%A3%9E%E8%88%B9/spacex-its-mars-lander.glb',
         //   scale:5,//5
         //   position:SPACE_X_position
         // }) 
@@ -506,7 +506,7 @@ window.onload = () =>{
 
      
         // IntelligentRoamingDynamicLine(viewer, aFRarr);//发光线
-        var uri = (WEBGL_DEBUG?local:server) + '/%E4%BA%BA%E7%89%A9%E7%8E%AF%E6%A8%A1%E5%9E%8B/%E7%89%A9%E4%BD%93/%E7%81%AB%E7%AE%AD/'
+        var uri = (WEBGL_DEBUG?WEBGL_Local:WEBGL_Server) + '/%E4%BA%BA%E7%89%A9%E7%8E%AF%E6%A8%A1%E5%9E%8B/%E7%89%A9%E4%BD%93/%E7%81%AB%E7%AE%AD/'
         uri += "%E7%8C%8E%E9%B9%B0%E4%B9%9D%E5%8F%B7/"
         var _options = {positions: aFRarr} 
         _options.url =  uri + 'scene.gltf'
@@ -618,7 +618,7 @@ window.onload = () =>{
              
                 // G.sTime(viewer,'2021-10-08T16:00:43.52Z')//+12
                 var LaunchBottom = new Cesium.Model.fromGltf({
-                  url: (WEBGL_DEBUG?local:server) + '/%E4%BA%BA%E7%89%A9%E7%8E%AF%E6%A8%A1%E5%9E%8B/%E7%8E%AF%E5%A2%83/%E5%8F%91%E5%B0%84%E5%9F%BA%E5%9C%B0-1(%E5%AE%9E%E6%99%AF)/spacex-launch-pad-complex/Landscape_0.glb',
+                  url: (WEBGL_DEBUG?WEBGL_Local:WEBGL_Server) + '/%E4%BA%BA%E7%89%A9%E7%8E%AF%E6%A8%A1%E5%9E%8B/%E7%8E%AF%E5%A2%83/%E5%8F%91%E5%B0%84%E5%9F%BA%E5%9C%B0-1(%E5%AE%9E%E6%99%AF)/spacex-launch-pad-complex/Landscape_0.glb',
                   modelMatrix:  Cesium.Transforms.headingPitchRollToFixedFrame(
                       Cesium.Cartesian3.fromDegrees(-80.6,28.6,130),
                       new Cesium.HeadingPitchRoll(
@@ -641,7 +641,7 @@ window.onload = () =>{
               
                 //黑色的猎鹰9号
                 G.aGLTF(viewer,{
-                  url:  (WEBGL_DEBUG?local:server) + '/%E4%BA%BA%E7%89%A9%E7%8E%AF%E6%A8%A1%E5%9E%8B/%E7%89%A9%E4%BD%93/%E7%81%AB%E7%AE%AD/%E7%8C%8E%E9%B9%B0%E4%B9%9D%E5%8F%B7/scene.gltf',
+                  url:  (WEBGL_DEBUG?WEBGL_Local:WEBGL_Server) + '/%E4%BA%BA%E7%89%A9%E7%8E%AF%E6%A8%A1%E5%9E%8B/%E7%89%A9%E4%BD%93/%E7%81%AB%E7%AE%AD/%E7%8C%8E%E9%B9%B0%E4%B9%9D%E5%8F%B7/scene.gltf',
                   scale:0.06 / 2,//5
                   position:{
                     x: -80.60008139822472,
@@ -652,7 +652,7 @@ window.onload = () =>{
                  
                 //发射场
                 var LaunchSite = new Cesium.Model.fromGltf({
-                  url: (WEBGL_DEBUG?local:server) + '/%E4%BA%BA%E7%89%A9%E7%8E%AF%E6%A8%A1%E5%9E%8B/%E7%8E%AF%E5%A2%83/%E5%8F%91%E5%B0%84%E5%9F%BA%E5%9C%B0-1(%E5%AE%9E%E6%99%AF)/spacex-launch-pad-complex/spacex-launch-pad-complex-max.glb',
+                  url: (WEBGL_DEBUG?WEBGL_Local:WEBGL_Server) + '/%E4%BA%BA%E7%89%A9%E7%8E%AF%E6%A8%A1%E5%9E%8B/%E7%8E%AF%E5%A2%83/%E5%8F%91%E5%B0%84%E5%9F%BA%E5%9C%B0-1(%E5%AE%9E%E6%99%AF)/spacex-launch-pad-complex/spacex-launch-pad-complex-max.glb',
                   modelMatrix:  Cesium.Transforms.headingPitchRollToFixedFrame(
                       Cesium.Cartesian3.fromDegrees(-80.6,28.6,130),
                       new Cesium.HeadingPitchRoll(

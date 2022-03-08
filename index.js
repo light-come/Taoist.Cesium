@@ -9,7 +9,7 @@ var script = [
 ,'<script src="/lib/plugins/codemirror-5.14.2/addon/hint/javascript-hint.js"></script>'
 ,'<script src="/lib/plugins/codemirror-5.14.2/mode/javascript/javascript.js"></script>'
 ,'<script src="/lib/plugins/codemirror-5.14.2/mode/markdown/markdown.js"></script>'
-,'<script src="./example/example.js"></script>'
+,''
 ];
 script.forEach(element => {
   document.writeln(element);
@@ -129,7 +129,7 @@ function init(e) {
 
 }
 
-window.onload = () => {
+this.onload = () => {
   //初始化全局变量
   window._editor = undefined
   //初始化交互信息
