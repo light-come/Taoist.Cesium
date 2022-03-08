@@ -9,6 +9,7 @@ var script = [
 ,'<script src="/lib/plugins/codemirror-5.14.2/addon/hint/javascript-hint.js"></script>'
 ,'<script src="/lib/plugins/codemirror-5.14.2/mode/javascript/javascript.js"></script>'
 ,'<script src="/lib/plugins/codemirror-5.14.2/mode/markdown/markdown.js"></script>'
+,'<script src="./example/example.js"></script>'
 ];
 script.forEach(element => {
   document.writeln(element);
@@ -127,52 +128,14 @@ function init(e) {
 
 
 }
-function test(){
-    
-  //Frame 对象
-  const FrameObj = document.getElementById('core_content');
- 
-  //监听message事件
-  window.addEventListener("message",function (e) {
-    if (e !== undefined) 
-        console.log( '接收', e.data);
-  }, false);
-
-  //规定发送格式
-  const data = {
-    event : "方法名称",
-    options: "内容:hello world :)"
-  }
-
-  //执行函数
-  function implement(params,value) {
-    if(value != null) params.options = value;
-    FrameObj.contentWindow.postMessage(params, '*');
-  }
-  //发送器
-  window.onload = function(){
-    FrameObj.contentWindow.postMessage(data, '*');
-  }
-
-
-  /////////////////////////////////////////////////////////////////行参
-
-  //定位相机
-  const positioning_camera = {
-    event : "example_positioning_camera",
-    options:'3FD815955E4811ECA56200163E0132C0'
-  } 
-
-}
 
 window.onload = () => {
   //初始化全局变量
   window._editor = undefined
-
   //初始化交互信息
   init(function () {
     //保持链接
-    new G.Gear()["Link"](function (uri) {
+    new Gear()["Link"](function (uri) {
       if(uri)
       var by = document.getElementById('core_content')
       if(by)by.setAttribute("src",uri)//+'?'+new Date().getTime()
@@ -190,5 +153,4 @@ window.onload = () => {
 
     })
   });
-
 }
