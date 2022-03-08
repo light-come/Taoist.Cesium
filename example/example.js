@@ -5,7 +5,7 @@
  * @version 1.1
  * @time 2021/3/26
  */
-(function () {
+(function (window) {
   class gear {
     constructor(viewer) {
       this.viewer = viewer;
@@ -3015,19 +3015,7 @@
       y: ev.clientY + document.body.scrollTop - document.body.clientTop,
     };
   };
-
-  const version = "0.0.1";
-  gear.ex = { expando: "gear" + (version + Math.random()).replace(/\D/g, "") };
-
-  try {
-    G.extend({
-      Gear: gear,
-    });
-  } catch (error) {
-    console.warn(error)
-  }
-
   if (typeof window.Gear === "undefined") {
     window.Gear = gear;
   }
-})();
+})(window);

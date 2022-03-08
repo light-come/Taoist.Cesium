@@ -15,18 +15,24 @@ const _ = (params, options, _viewer) => {
   if (true) {
     //资源全部加载后飞行 防止卡顿
     var state = false;var percent_state = false//非b3dm加载不需要使用这个
+    let model_index = 0
     G.IA(
       function (start) {},
       function (end) {
         state = false;
         setTimeout(() => {
           state = true;
-        }, 500);
+        }, 1000);
         // console.log(end)
       },
       function (percent) {
         $("#file-page-percent").html(percent)
-        if(percent == "100%")percent_state = true
+        if(percent == "100%"){
+          model_index++
+          if(model_index>=2){
+            percent_state = true
+          }
+        }
       }
     );
     var interva = setInterval(() => {
