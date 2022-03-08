@@ -264,7 +264,7 @@ window.onload = () => {
 
         // VMSDS.core.Highlight(Gltf)
       }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
-
+      if(!WEBGL_GLSL)return
       let setSelected = (postProcessStage, pickeds) => {
         postProcessStage.selected = [];
         postProcessStage.enabled = false;

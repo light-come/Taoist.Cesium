@@ -77,6 +77,8 @@ function init(viewer) {
       Rotate({x: 116.23080758191139,y: 39.54239260122578,z: 540},viewer)//pitch:0,
      }, 200);
   }, 6000);
+
+  if(!WEBGL_GLSL)return
   ///模型特效
   let setSelected = (postProcessStage,pickeds) =>{
     postProcessStage.selected = []
