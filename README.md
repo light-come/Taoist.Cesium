@@ -1,7 +1,7 @@
 ---
-title: Taoist.Cesium
+title: TCesium
 ---
-<img src="https://github.com/light-come/Taoist.Cesium/blob/main/assets/images/logo.png" width="40%" />
+<img src="https://github.com/light-come/TCesium/blob/main/assets/images/logo.png" width="40%" />
 
 # TCesium
 TCesium是CesiumJS的一个实列库凌驾于原生实列的组合项目，作用于引导开发，和拓展开发
@@ -36,4 +36,4 @@ QQ群627108989
 - **旋转控件**
 - **人物漫游**
 
-[Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.html). Taoist.Cesium is free for both commercial and non-commercial use.
+[Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.html). TCesium is free for both commercial and non-commercial use.
