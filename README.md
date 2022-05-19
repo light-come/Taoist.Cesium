@@ -1,7 +1,7 @@
 ---
 title: Taoist.Cesium
 ---
-<img src="https://raw.githubusercontent.com/light-come/Taoist.Cesium/main/assets/images/logo.png?token=GHSAT0AAAAAABTRSMO25XGIGGYQOJDGDBJ6YUFU3ZQ" width="40%" />
+<img src="//github.com/light-come/Taoist.Cesium/blob/main/assets/images/logo.png" width="40%" />
 
 # TCesium
 TCesium是CesiumJS的一个实列库凌驾于原生实列的组合项目，作用于引导开发，和拓展开发
