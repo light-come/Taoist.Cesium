@@ -4,9 +4,8 @@ title: TCesium
 <img src="https://github.com/light-come/TCesium/blob/main/assets/images/logo.png" width="40%" />
 
 # TCesium
-TCesium是CesiumJS的一个实列库凌驾于原生实列的组合项目，作用于引导开发，和拓展开发
-## CesiumJS
-CesiumJS是一个JavaScript库，用于在web浏览器中创建三维球体和二维地图，无需插件。它使用WebGL进行硬件加速图形处理，并且是跨平台、跨浏览器的，并针对动态数据可视化进行了调整。
+TCesium是CesiumJS的一个实列库，作用于引导开发，和拓展开发
+
 ### ❤️ 如何帮助我? 
 
 - 群招募信息提供给希望推进代码库开发人员,以及其他推进工作者
