@@ -1,7 +1,6 @@
 ---
-title: TCesium
+ T-Cesium
 ---
-<img src="https://github.com/light-come/TCesium/blob/main/assets/images/logo.png" width="40%" />
 
 # TCesium
 TCesium是CesiumJS的一个实列库，作用于引导开发，和拓展开发
