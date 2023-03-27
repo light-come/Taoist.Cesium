@@ -13,7 +13,7 @@ CesiumJS是一个JavaScript库，用于在web浏览器中创建三维球体和�
 - 出现问题请提交issues 
 
 ```sh
-QQ群627108989
+-
 ```
 ### :clap: TCesium Demos 0.0.1 - 2022-05-19
 较完整的亮点包含的如下的演示
