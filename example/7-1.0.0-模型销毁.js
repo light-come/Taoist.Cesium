@@ -1,4 +1,4 @@
-var script = [ '<!-- 初始化三维库 --><script type="text/javascript" src="/lib/index.js" libpath="../" include="Taoist"></script>'];
+var script = ['<!-- 初始化三维库 --><script type="text/javascript" src="/lib/index.js" libpath="../" include="Taoist"></script>'];
 script.forEach(element => {
   document.writeln(element);
 });
@@ -106,7 +106,6 @@ window.onload = () => {
               _byeModel();
               //日照
               _("example_runshineAnalysis");
-
             },
           },
           Cesium
@@ -219,15 +218,14 @@ window.onload = () => {
         }
       }
       //模型加载完成的回调
-      CAMERA_X_GLTFS[CAMERA_X_GLTFS.length - 1].readyPromise
-        .then(function () {
-          //then 判断最后一个模型加载完成的回调
-          //模型发光
-          setSelected(postProcessStage, CAMERA_X_GLTFS);
-        })
-        .otherwise(function (error) {
-          console.log(error);
-        });
+      CAMERA_X_GLTFS[CAMERA_X_GLTFS.length - 1].readyPromise.then(function () {
+        //then 判断最后一个模型加载完成的回调
+        //模型发光
+        setSelected(postProcessStage, CAMERA_X_GLTFS);
+      });
+      // .otherwise(function (error) {
+      //   console.log(error);
+      // });
 
       //单机事件 点击模型后变色发光(选中效果)
       var handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
@@ -264,7 +262,7 @@ window.onload = () => {
 
         // VMSDS.core.Highlight(Gltf)
       }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
-      if(!WEBGL_GLSL)return
+      if (!WEBGL_GLSL) return;
       let setSelected = (postProcessStage, pickeds) => {
         postProcessStage.selected = [];
         postProcessStage.enabled = false;
