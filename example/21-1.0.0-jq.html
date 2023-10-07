@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🌏 JazzyJoint Example.🌏</title>
+  <script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+  <script type="text/javascript" src="./21-1.0.0-jq.js"></script>
+
+</head>
+
+<body style="margin: 0;">
+  <div class="container"></div>
+</body>
+
+<script>
+  var dom = $(".container")
+  var jazzy1 = dom.JazzyJoint({
+    positions: [0.0, 0.0, 600, 0.0],
+    html: "123",
+  })
+  var jazzy2 = dom.JazzyJoint({
+    positions: [0.0, 0.0, 600, 500],
+    html: "456",
+  })
+  var jazzy3 = dom.JazzyJoint()
+  var jazzy4 = dom.JazzyJoint()
+
+  jazzy2.css({
+    "background-color": "blue",
+    width: "300px",
+    height: "50px",
+    border: "2px solid black",
+  })
+  $(jazzy3.jazzyBox()).css({
+    "border": "2px solid #0089ff"
+  });
+
+  jazzy3.hide()
+  jazzy4.remove()
+
+  setTimeout(() => {
+    jazzy3.show()
+    jazzy2.refresh()
+
+  }, 3000);
+</script>
+
+</html>

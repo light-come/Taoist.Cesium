@@ -53,7 +53,7 @@ window.onload = () =>{
                   ,duration: 2
                 })
 
-                // //日照
+                // 日照
                 _("example_runshineAnalysis");
                 var tileset = G.aTiles(viewer, {
                   type: "房间",

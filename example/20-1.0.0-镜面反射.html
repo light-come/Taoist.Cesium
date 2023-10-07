@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🌏I code and sometimes paint when I have time.🌏</title>
+  <!-- 实列 -->
+  <script type="text/javascript" src="./20-1.0.0-镜面反射.js"></script>
+  <script type="text/javascript" src="../lib/Plugins/Primitive/WaterPrimitive.js"></script>
+
+</head>
+
+<body>
+  <div id="top-overlay">
+    <div class="background"></div>
+
+    <h2 id="travelscope" class="visible">
+      当前模块：<b>镜面反射</b>.
+    </h2>
+  </div>
+
+  <div class="map-container" style="z-index: 999;" id="mapBox"></div>
+</body>
+
+</html>
+<script>
+
+
+  var arr = [
+    { x: 120.11702414169152, y: 30.271640848090584, z: 55.46898889113309 },
+    { x: 120.1200346341758, y: 30.272029496209118, z: 18.997166045584816 },
+    { x: 120.11979627904712, y: 30.274964799476894, z: 17.00867557848968 },
+    { x: 120.1162627039393, y: 30.2748834161609, z: 16.976012403179745 }
+  ]
+  var positions = []
+  for (let j = 0; j < arr.length; j++) {
+    positions[j] = Cesium.Cartographic.fromCartesian(arr[j])
+  }
+
+  const waterParams = {
+    波纹大小: 2000.0,
+    透明度: 0,
+    反射率: 0.7,
+    扭曲: 3.7,
+    高度: 1,
+  };
+  setTimeout(() => {
+    const water = new WaterPrimitive({
+      scene: viewer.scene,
+      positions: positions,
+      height: 0,
+      rippleSize: 100,
+    });
+    console.log(water, "add")
+
+    water.rippleSize = waterParams["波纹大小"];
+    water.waterAlpha = waterParams["透明度"];
+    water.reflectivity = waterParams["反射率"];
+    water.distortionScale = waterParams["扭曲"];
+    water.height = waterParams["高度"];
+
+    viewer.scene.primitives.add(water)
+
+  }, 2000);
+
+</script>

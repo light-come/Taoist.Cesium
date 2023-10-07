@@ -1115,7 +1115,7 @@
         _this.IntelligentRoamingDynamicLine(viewer, element);
       });
 
-      var uri = (WEBGL_DEBUG ?WEBGL_Local:WEBGL_Server) + "/%E4%BA%BA%E7%89%A9%E7%8E%AF%E6%A8%A1%E5%9E%8B/%E4%BA%BA%E7%89%A9/%E7%99%BD%E8%86%9C%E8%A1%8C%E8%B5%B0/scene.gltf";
+      var uri = (WEBGL_DEBUG ? WEBGL_Local : WEBGL_Server) + "/%E4%BA%BA%E7%89%A9%E7%8E%AF%E6%A8%A1%E5%9E%8B/%E4%BA%BA%E7%89%A9/%E7%99%BD%E8%86%9C%E8%A1%8C%E8%B5%B0/scene.gltf";
       var _options = { positions: FR_CURVE };
       _options.url = uri;
       _options.scale = 0.01;
@@ -1772,11 +1772,13 @@
     /**
      * 添加杭州高程
      */
-    example_altitude() {
+    async example_altitude() {
       const viewer = this.viewer;
       //加载杭州高程地形
-      var provider = new Cesium.CesiumTerrainProvider({
-        url: "http://121.40.42.254:8008/%E6%9D%AD%E5%B7%9E-%E9%AB%98%E7%A8%8B/data/",
+
+      
+      var provider = await Cesium.CesiumTerrainProvider.fromUrl(WEBGL_Server + "/杭州-地形切片/地形切片/",{
+        url: WEBGL_Server + "/杭州-地形切片/地形切片/",
         requestWaterMask: true, //开启法向量
         requestVertexNormals: true, //开启水面特效
       });
@@ -1794,7 +1796,7 @@
 
       G.aTiles(viewer, {
         type: "建筑",
-        url: "http://121.40.42.254:8008/%E6%9D%AD%E5%B7%9E-%E7%9F%A2%E9%87%8F%E6%A8%A1%E5%9E%8B/tileset.json", //http://127.0.0.1:64158
+        url: WEBGL_Server + "/杭州矢量模型/tileset.json", //http://127.0.0.1:64158
         flyTo: false,
         heightOffset: 0,
         height: 0,
@@ -2368,7 +2370,7 @@
       xyList = Cesium.Cartesian3.fromDegreesArray(arr);
       var FlightRoamingData = getTimeList(xyFineBezier); //xyFineBezier
 
-      var gltf_uri = "http://121.40.42.254:8008/%E4%BA%BA%E7%89%A9%E7%8E%AF%E6%A8%A1%E5%9E%8B/%E4%BA%BA%E7%89%A9/%E7%99%BD%E8%86%9C%E8%A1%8C%E8%B5%B0/scene.gltf";
+      var gltf_uri = WEBGL_Server + "/%E4%BA%BA%E7%89%A9%E7%8E%AF%E6%A8%A1%E5%9E%8B/%E4%BA%BA%E7%89%A9/%E7%99%BD%E8%86%9C%E8%A1%8C%E8%B5%B0/scene.gltf";
 
       var czml = [
         {
@@ -2505,7 +2507,7 @@
     /**
      * 人物漫游
      */
-    example_FlyingGame(tileset) {
+    async example_FlyingGame(tileset) {
       var canvas = this.viewer.canvas;
       var _this = this;
       var viewer = this.viewer;
@@ -2738,14 +2740,12 @@
           scene.postRender.addEventListener(_eventListener);
         }
       }
-
-      var planePrimitive = scene.primitives.add(
-        Cesium.Model.fromGltf({
-          url: (WEBGL_DEBUG ?WEBGL_Local:WEBGL_Server) + "/%E4%BA%BA%E7%89%A9%E7%8E%AF%E6%A8%A1%E5%9E%8B/%E7%8E%AF%E5%A2%83/%E8%B5%B0%E8%B7%AF%E7%9A%84%E9%B8%AD%E5%AD%90/scene.gltf",
-          modelMatrix: Cesium.Transforms.headingPitchRollToFixedFrame(position, hpRoll, Cesium.Ellipsoid.WGS84, fixedFrameTransform),
-          minimumPixelSize: 128,
-        })
-      );
+      const gltf = await Cesium.Model.fromGltfAsync({
+        url: (WEBGL_DEBUG ? WEBGL_Local : WEBGL_Server) + "/%E4%BA%BA%E7%89%A9%E7%8E%AF%E6%A8%A1%E5%9E%8B/%E7%8E%AF%E5%A2%83/%E8%B5%B0%E8%B7%AF%E7%9A%84%E9%B8%AD%E5%AD%90/scene.gltf",
+        modelMatrix: Cesium.Transforms.headingPitchRollToFixedFrame(position, hpRoll, Cesium.Ellipsoid.WGS84, fixedFrameTransform),
+        minimumPixelSize: 128,
+      });
+      var planePrimitive = scene.primitives.add(gltf);
 
       planePrimitive.type = "IntelligentRoaming";
       planePrimitive.id = "Will I still be able to use data roaming after I have NO!";

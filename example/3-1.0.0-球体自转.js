@@ -20,6 +20,9 @@ function init(viewer) {
   turn(viewer,'play')//stop //为暂停//开始自转
   //  G.Turn.Release(viewer)//销毁
 
+  G.E.AtmosphericEffects(viewer);
+
+
 }
 
 
